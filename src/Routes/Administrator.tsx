@@ -37,7 +37,7 @@ const AdministratorPage = () => {
                 Generate QR Code
             </button>
             {showQR && siteId && (
-                <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${siteId}`} className="mt-4" />
+                <QRCode value={`${process.env.REACT_APP_FE_URL}`} className="mt-4" />
             )}
         </div>
     );
