@@ -3,48 +3,41 @@ import { useLocation } from 'react-router-dom';
 import { GetSites } from "../Services/GetSites";
 
 const SitePage = () => {
-    // Updated state to hold objects with key and siteName
-    const [sites, setSites] = useState<{ key: string; siteName: string }[]>([]);
-    const [isValidSiteId, setIsValidSiteId] = useState(false);
     const [siteName, setSiteName] = useState('');
-
-    useEffect(() => {
-        const getObjectNames = async () => {
-            const sitesData = await GetSites();
-            setSites(sitesData);
-        };
-
-        getObjectNames();
-    }, []);
-
-    // You can use it to access the query parameters.
+    const [loading, setLoading] = useState(true); // Added loading state
     const location = useLocation();
 
-    // A function to parse the query parameters from the URL
-    const useQuery = () => {
-        return new URLSearchParams(location.search);
-    };
-
-    const query = useQuery();
-    const siteId = query.get('siteId'); // Extract the 'siteId' query parameter
-
-    // Check if siteId matches any of the keys in sites
     useEffect(() => {
-        const matchingSite = sites.find(site => site.key === siteId);
-        if (matchingSite) {
-            setIsValidSiteId(true);
-            setSiteName(matchingSite.siteName); // Update siteName state if a match is found
-        } else {
-            setIsValidSiteId(false);
-        }
-    }, [siteId, sites]); // Depend on siteId and sites so it updates accordingly
+        // Immediately invoked async function inside the useEffect
+        (async () => {
+            try {
+                const sitesData = await GetSites();
+                const query = new URLSearchParams(location.search);
+                const siteId = query.get('siteId'); // Extract the 'siteId' query parameter
 
+                // Find the matching site
+                const matchingSite = sitesData.find(site => site.key === siteId);
+                if (matchingSite) {
+                    setSiteName(matchingSite.siteName); // Update siteName if a match is found
+                } else {
+                    setSiteName('No matching site'); // Update siteName to show no match found
+                }
+            } catch (error) {
+                console.error('Failed to get sites', error);
+                setSiteName('Failed to load site data'); // Handle error case
+            } finally {
+                setLoading(false); // Ensure loading is set to false after operation
+            }
+        })();
+    }, [location.search]); // Depend on location.search to rerun if query parameters change
+
+    // Render loading state, error message, or site name based on the state
     return (
         <div>
-            {isValidSiteId ? (
-                <p>Site Name: {siteName}</p>
+            {loading ? (
+                <p>Loading...</p>
             ) : (
-                <p>No Unique ID provided or ID does not match.</p>
+                <p>{siteName}</p>
             )}
         </div>
     );

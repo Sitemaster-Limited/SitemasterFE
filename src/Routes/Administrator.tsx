@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { PostSite } from "../Services/PostSite";
 import QRCode from 'qrcode.react';
-import {PostSite} from "../Services/PostSite";
 const AdministratorPage = () => {
     const [showQR, setShowQR] = useState(false);
     const [name, setName] = useState('');
@@ -37,7 +37,7 @@ const AdministratorPage = () => {
                 Generate QR Code
             </button>
             {showQR && siteId && (
-                <QRCode value={`${process.env.REACT_APP_FE_URL}`} className="mt-4" />
+                <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${siteId}`} className="mt-4" />
             )}
         </div>
     );
