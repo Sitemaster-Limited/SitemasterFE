@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import logo from '../../Images/SiteMasterLogo.png'; // Ensure the path is correct
-import Navbar from '../../Components/Navbar'
 
 const LoginPage = () => {
     const navigate = useNavigate();
