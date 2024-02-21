@@ -1,15 +1,14 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import logo from '../Images/SiteMasterLogo.png'; // Ensure the path is correct
-import Navbar from '../Components/Navbar'
+import logo from '../../Images/SiteMasterLogo.png'; // Ensure the path is correct
+import Navbar from '../../Components/Navbar'
 
 const LoginPage = () => {
     const navigate = useNavigate();
 
     return (
         <>
-            <Navbar/>
-            <div className="flex flex-col mr-64 justify-center items-center h-screen">
+            <div className="flex flex-col justify-center items-center h-screen">
                 {/* Logo Image */}
                 <img src={logo} alt="SiteMaster Logo" className="mb-20 w-[300px]" /> {/* Adjust margin-bottom as needed */}
 

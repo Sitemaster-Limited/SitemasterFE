@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { GetSites } from "../Services/GetSites";
+import { GetSites } from "../../Services/GetSites";
 
 const SitePage = () => {
     const [siteName, setSiteName] = useState('');
