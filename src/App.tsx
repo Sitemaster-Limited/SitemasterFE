@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import './Styling/App.css';
+
 import LoginPage from "./Routes/LoginPage";
 import SitePage from "./Routes/SitePage";
 import AdministratorPage from "./Routes/Administrator";
