@@ -4,7 +4,7 @@ import {useFormContext} from "../../Context/LocalObjectForm";
 
 import QRCode from "qrcode.react";
 
-const Sites = () => {
+const CreateSite = () => {
 
     const {formData, updateFormData} = useFormContext();
     const [showQR, setShowQR] = useState(false);
@@ -30,21 +30,6 @@ const Sites = () => {
     return (
         <div className="lex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">
 
-            <div className="h-[6%] rounded-[5px] mb-2">
-                <h1 className="text-left text-[34px]">
-                    My Sites
-                </h1>
-            </div>
-
-            <div className="bg-yellow-500 h-[5%] rounded-[5px] mb-2">
-
-            </div>
-
-            <div className="bg-white h-[87%] rounded-[5px] overflow-auto">
-
-            </div>
-
-            {/*
             <div
                 className=" h-[8%] flex items-center space-x-2 bg-white border-2 rounded-lg p-4 shadow-md mb-4">
                 <span className="font-semibold px-1">Site Name</span>
@@ -74,11 +59,10 @@ const Sites = () => {
                     <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${siteId}`} className="mt-4"/>
                 )}
             </div>
-            */}
 
         </div>
 
     );
 };
 
-export default Sites;
+export default CreateSite;
