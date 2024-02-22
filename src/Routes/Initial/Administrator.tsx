@@ -8,7 +8,6 @@ const AdministratorPage = () => {
 
     return (
         <>
-
             <Routes>
                 <Route path="/" element={<Navigate replace to="sites" />} />
                 <Route path="sites" element={<Sites />} />
