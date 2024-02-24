@@ -35,7 +35,7 @@ const Sites = () => {
             </div>
 
             <div className="h-[5%] min-h-[40px] mb-2 flex">
-                <div className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px]" >
+                <div className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px] drop-shadow" >
                     <div className="p-2">
                         <img src={AddSite} alt="Add" className="inline mr-2"/>
                         New Site
@@ -47,7 +47,7 @@ const Sites = () => {
                         placeholder="Search Sites..."
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        className="w-full p-2 h-full rounded-[5px]"
+                        className="w-full p-2 h-full rounded-[5px] drop-shadow"
                     />
                 </div>
                 <div className="flex flex-grow justify-end items-center">
