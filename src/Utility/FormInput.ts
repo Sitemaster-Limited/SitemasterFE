@@ -9,7 +9,7 @@ export interface FormData {
     siteName: string;
     siteLocation: string;
     siteMedia: [];
-    // Site Access
+    // Site Employees
     siteAccess: [];
 
 }

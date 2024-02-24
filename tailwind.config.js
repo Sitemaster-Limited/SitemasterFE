@@ -7,6 +7,8 @@ module.exports = {
         custom: {
           bg: '#F0F1F5',
           red: '#EE172E',
+          grey: '#666666',
+          lightgrey: '#DEDEDE',
         },
       },
     },

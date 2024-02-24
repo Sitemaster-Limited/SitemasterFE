@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import {SiteList, SimpleSort, SiteListProps} from '../Utility/GlobalTypes';
-import { sortSites } from '../Utility/SiteListHandler'
-import UpArrow from "../Images/UpArrow.png";
-import DownArrow from "../Images/DownArrow.png";
+import React, { useState, useEffect } from 'react';
+import { SiteList, SimpleSort, SiteListProps } from '../Utility/GlobalTypes';
+import { sortSites } from '../Utility/SiteListHandler';
 
-const DisplaySiteList: React.FC<SiteListProps> = ({ sites }) => {
+import UpArrow from '../Images/UpArrow.png';
+import DownArrow from '../Images/DownArrow.png';
+
+const DisplaySiteList: React.FC<SiteListProps> = ({ sites, searchTerm }) => {
     const [sortedList, setSortedList] = useState<SiteList[]>(sites);
     const [smplSort, setDirection] = useState<SimpleSort>({ key: null, direction: null });
+
+    useEffect(() => {
+        setSortedList(sites); // Update sortedList when sites prop changes
+    }, [sites]);
+
+    // Filter sites based on searchTerm
+    const filteredSites = (searchTerm || "").trim() ? sortedList.filter(site =>
+        site.name.toLowerCase().includes((searchTerm || "").toLowerCase())
+    ) : sortedList;
 
     const SortArrow: React.FC<{ direction: 'asc' | 'desc' | null }> = ({ direction }) => {
         if (direction === 'asc') {
@@ -48,7 +58,7 @@ const DisplaySiteList: React.FC<SiteListProps> = ({ sites }) => {
                 </tr>
                 </thead>
                 <tbody>
-                {sortedList.map((property, index) => (
+                {filteredSites.map((property, index) => (
                     <tr className="h-16 border-gray-300 border-b" key={index}>
                         <td className="text-left pl-8">{property.name}</td>
                         <td className="text-left pl-8">{property.date}</td>

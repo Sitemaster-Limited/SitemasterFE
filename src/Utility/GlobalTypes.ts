@@ -11,4 +11,5 @@ export type SimpleSort = {
 
 export type SiteListProps = {
     sites: SiteList[];
+    searchTerm?: string;
 };
