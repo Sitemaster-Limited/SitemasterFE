@@ -12,7 +12,7 @@ const AdministratorPage = () => {
             <Routes>
                 <Route path="/" element={<Navigate replace to="sites" />} />
                 <Route path="sites" element={<Sites />} />
-                <Route path="sites/generate" element={<CreateSite />} />
+                <Route path="sites/create" element={<CreateSite />} />
                 <Route path="access" element={<Employees />} />
                 <Route path="settings" element={<Settings />} />
             </Routes>

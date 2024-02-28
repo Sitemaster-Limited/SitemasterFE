@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SiteList } from '../../Utility/GlobalTypes';
-import { Link } from 'react-router-dom';
 
 import DisplaySiteList from '../../Components/DisplaySiteList';
 import AddSite from '../../Images/AddSite.png';
@@ -40,7 +39,7 @@ const Sites = () => {
 
             <div className="h-[42px] mb-2 flex">
                 <div className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px] drop-shadow" >
-                    <button className="p-2">
+                    <button className="p-2" onClick={() => navigate('/admin/sites/create')}>
                         <img src={AddSite} alt="Add" className="inline mr-2"/>
                         New Site
                     </button>
