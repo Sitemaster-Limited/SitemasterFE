@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SiteList } from '../../Utility/GlobalTypes';
+import { Link } from 'react-router-dom';
 
 import DisplaySiteList from '../../Components/DisplaySiteList';
 import AddSite from '../../Images/AddSite.png';
@@ -7,11 +9,13 @@ import Archive from '../../Images/Archive.png';
 
 const Sites = () => {
 
+    const navigate = useNavigate();
+
     const sites: SiteList[] = [
-        { name: 'Hillside Villa', date: '15-06-2023', status: 'Active' },
-        { name: 'Adela Villa', date: '17-06-2023', status: 'Saved' },
-        { name: 'Cakes Villa', date: '12-06-2023', status: 'Inactive' },
-        { name: 'Bakers Villa', date: '18-06-2023', status: 'Active' },
+        { id: '001', name: 'Hillside Villa', date: '15-06-2023', status: 'Active' },
+        { id:'002', name: 'Adela Villa', date: '17-06-2023', status: 'Saved' },
+        { id:'003', name: 'Cakes Villa', date: '12-06-2023', status: 'Inactive' },
+        { id:'004', name: 'Bakers Villa', date: '18-06-2023', status: 'Active' },
 
         // ... other properties
     ];
@@ -34,12 +38,12 @@ const Sites = () => {
                 </h1>
             </div>
 
-            <div className="h-[5%] min-h-[40px] mb-2 flex">
+            <div className="h-[42px] mb-2 flex">
                 <div className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px] drop-shadow" >
-                    <div className="p-2">
+                    <button className="p-2">
                         <img src={AddSite} alt="Add" className="inline mr-2"/>
                         New Site
-                    </div>
+                    </button>
                 </div>
                 <div className="flex-1 ml-2 max-w-96" >
                     <input

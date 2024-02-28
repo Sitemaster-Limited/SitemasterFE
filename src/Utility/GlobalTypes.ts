@@ -1,4 +1,5 @@
 export type SiteList = {
+    id: string;
     name: string;
     date: string;
     status: 'Active' | 'Saved' | 'Inactive';

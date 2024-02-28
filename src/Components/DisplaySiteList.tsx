@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { SiteList, SimpleSort, SiteListProps } from '../Utility/GlobalTypes';
 import { sortSites } from '../Utility/SiteListHandler';
 
+import SiteAction from "./SiteAction";
+
 import UpArrow from '../Images/UpArrow.png';
 import DownArrow from '../Images/DownArrow.png';
 
@@ -29,7 +31,7 @@ const DisplaySiteList: React.FC<SiteListProps> = ({ sites, searchTerm }) => {
     };
 
     return (
-        <div className="overflow-x-auto">
+        <div className="">
             <table className="min-w-full bg-white">
                 <thead>
                 <tr className="w-full h-16 border-gray-300 border-b py-8">
@@ -58,16 +60,18 @@ const DisplaySiteList: React.FC<SiteListProps> = ({ sites, searchTerm }) => {
                 </tr>
                 </thead>
                 <tbody>
-                {filteredSites.map((property, index) => (
+                {filteredSites.map((site, index) => (
                     <tr className="h-16 border-gray-300 border-b" key={index}>
-                        <td className="text-left pl-8">{property.name}</td>
-                        <td className="text-left pl-8">{property.date}</td>
+                        <td className="text-left pl-8">{site.name}</td>
+                        <td className="text-left pl-8">{site.date}</td>
                         <td className="text-left pl-6">
-                            <span className={`px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-${property.status.toLowerCase()}-200 text-${property.status.toLowerCase()}-800`}>
-                              {property.status}
+                            <span className={`px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-${site.status.toLowerCase()}-200 text-${site.status.toLowerCase()}-800`}>
+                              {site.status}
                             </span>
                         </td>
-                        <td className="text-left pl-8">...</td>
+                        <td className="text-left pl-12 relative">
+                            <SiteAction site={site} />
+                        </td>
                     </tr>
                 ))}
                 </tbody>
