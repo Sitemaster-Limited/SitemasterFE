@@ -8,7 +8,6 @@ const CreateSite = () => {
 
     const {formData, updateFormData} = useFormContext();
     const [showQR, setShowQR] = useState(false);
-    const [name, setName] = useState('');
     const [siteId, setSiteId] = useState('');
 
     const generateUniqueId = (name: string) => {
@@ -16,6 +15,9 @@ const CreateSite = () => {
     };
 
     const handleGenerateQR = () => {
+
+        const name = String(formData.siteName);
+
         if (!name.trim()) { // Check if the name is empty or just whitespace
             alert('Please enter a name before generating a QR code.'); // Prompt the user
             return; // Exit the function early
@@ -28,42 +30,90 @@ const CreateSite = () => {
     };
 
     return (
-        <div className="lex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">
+        <div className="flex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">
 
             <div className="h-[6%] rounded-[5px] mb-3">
                 <h1 className="text-left text-[34px]">
-                    Create Site
+                    Create A Site
                 </h1>
             </div>
 
-            <div
-                className=" h-[8%] flex items-center space-x-2 bg-white border-2 rounded-lg p-4 shadow-md mb-4">
-                <span className="font-semibold px-1">Site Name</span>
-                <input
-                    type="text"
-                    value={formData.name || ''}
-                    onChange={(e) => updateFormData({name: e.target.value})}
-                    placeholder="name..."
-                    className="flex-1 rounded-lg py-1 px-2 text-sm outline-none border border-black"
-                />
+            <div className="text-left mb-2">
+                <p>
+                    Here is where you can create your site specific QR code
+                </p>
             </div>
 
-            <div className="flex flex-col items-center justify-center space-y-4">
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your site name"
-                    className="px-4 py-2 border rounded"
-                />
-                <button
-                    onClick={handleGenerateQR}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Generate QR Code
-                </button>
-                {showQR && siteId && (
-                    <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${siteId}`} className="mt-4"/>
-                )}
+            <div className="md:w-1/2">
+                <div className="text-left mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
+                        Give your site a name:
+                    </label>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="site-name"
+                        type="text"
+                        value={formData.siteName || ''}
+                        onChange={(e) => updateFormData({siteName: e.target.value})}
+                        placeholder="name..."/>
+                </div>
+
+
+                <div className="text-left mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
+                        Where is you site located? (appx.)
+                    </label>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="site-location"
+                        type="text"
+                        value={formData.siteLocation || ''}
+                        onChange={(e) => updateFormData({siteLocation: e.target.value})}
+                        placeholder="site location..."/>
+                </div>
+
+
+                <div className="text-left mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
+                        Who has access to your site?
+                    </label>
+                    <select
+                        className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="site-access">
+                        <option value="private">Private</option>
+                        <option value="public">Public</option>
+                    </select>
+                </div>
+
+
+                <div className="text-left mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-blueprints">
+                        Upload any site blueprints:
+                    </label>
+                    <div className="flex justify-center items-center w-full">
+                        <label
+                            className="flex flex-col rounded-lg border-4 border-dashed w-full h-32 p-10 group text-center">
+                            <div className="h-full w-full text-center flex flex-col justify-center items-center">
+                                <p className="pointer-none text-gray-500 "><span className="text-sm">Drag & Drop Materials</span> or
+                                    click to select files</p>
+                            </div>
+                            <input type="file"
+                                   className="hidden"/>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div className="flex flex-col items-center justify-center space-y-4">
+                    <button
+                        onClick={handleGenerateQR}
+                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Generate QR Code
+                    </button>
+                    {showQR && siteId && (
+                        <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${siteId}`} className="mt-4"/>
+                    )}
+                </div>
             </div>
 
         </div>
