@@ -2,7 +2,10 @@ import React, {useState} from "react";
 import {PostSite} from "../../Services/PostSite";
 import {useFormContext} from "../../Context/LocalObjectForm";
 
+import EmployeeSelection from "../../Components/EmployeeSelection";
+
 import QRCode from "qrcode.react";
+import {EmployeeList} from "../../Utility/GlobalTypes";
 
 const CreateSite = () => {
 
@@ -28,6 +31,15 @@ const CreateSite = () => {
 
         PostSite(name, uniqueSiteId).then(() => console.log("Upload handled"));
     };
+
+    const employees: EmployeeList[] = [
+        { id: '001', firstName: 'Ethan ', lastName: 'Fifle', phoneNumber: '123-423-4534' },
+        { id:'002', firstName: 'Ilija', lastName: 'rasta', phoneNumber: '123-443-5434' },
+        { id:'003', firstName: 'Andrew', lastName: 'brown', phoneNumber: '443-244-3434' },
+        { id:'004', firstName: 'Jakub', lastName: 'smith', phoneNumber: '436-764-9753' },
+
+        // ... other properties
+    ];
 
     return (
         <div className="flex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">
@@ -77,12 +89,7 @@ const CreateSite = () => {
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
                         Who has access to your site?
                     </label>
-                    <select
-                        className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="site-access">
-                        <option value="private">Private</option>
-                        <option value="public">Public</option>
-                    </select>
+                    <EmployeeSelection employees={employees}/>
                 </div>
 
 
