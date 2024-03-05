@@ -39,7 +39,7 @@ const Navbar = () => {
                 </li>
                 <li className="py-2 hover:bg-custom-red cursor-pointer">
                     <div onClick={() => setIsOpen(false)}>
-                        <Link to="/admin/access" className="md:ml-4 block text-white">
+                        <Link to="/admin/employees" className="md:ml-4 block text-white">
                             <div className="flex items-center justify-center md:justify-start">
                                 <img src={Employees} alt="" className="hidden md:inline mr-2"/>
                                 Employees

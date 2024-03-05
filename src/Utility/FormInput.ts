@@ -1,3 +1,4 @@
+import { Site } from './GlobalTypes'
 
 export interface FormData {
     id: string;
@@ -9,8 +10,9 @@ export interface FormData {
     siteName: string;
     siteLocation: string;
     siteMedia: [];
+    sites: Site[];
     siteAccess: [];
-    // list of Employees
+    // Employees List
     employees: [];
 
 }

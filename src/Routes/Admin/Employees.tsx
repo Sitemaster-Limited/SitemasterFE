@@ -1,49 +1,59 @@
-import {useNavigate} from "react-router-dom";
-import {EmployeeList} from "../../Utility/GlobalTypes";
-import React, {useState} from "react";
-import AddSite from "../../Images/AddSite.png";
-import Archive from "../../Images/Archive.png";
+import React, {useEffect, useState} from "react";
+import { EmployeeList } from "../../Utility/GlobalTypes";
+import { useFormContext } from "../../Context/LocalObjectForm";
 import DisplayEmployeeList from "../../Components/DisplayEmployeeList";
+import AddSite from "../../Images/AddSite.png";
 
 const Employees = () => {
 
-    const navigate = useNavigate();
-
-    const employees: EmployeeList[] = [
-        { id: '001', firstName: 'Ethan ', lastName: 'Fifle', phoneNumber: '123-423-4534' },
-        { id:'002', firstName: 'Ilija', lastName: 'rasta', phoneNumber: '123-443-5434' },
-        { id:'003', firstName: 'Andrew', lastName: 'brown', phoneNumber: '443-244-3434' },
-        { id:'004', firstName: 'Jakub', lastName: 'smith', phoneNumber: '436-764-9753' },
-
-        // ... other properties
-    ];
-
-    // State to hold the search term
+    const { formData, updateFormData } = useFormContext();
+    const [newEmployee, setNewEmployee] = useState({ firstName: '', lastName: '', phoneNumber: '' });
     const [searchTerm, setSearchTerm] = useState("");
-    const [activeButton, setActiveButton] = useState('all');
+    const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
-    // Function to handle the change in the search input
+    const [employees, setEmployees] = useState<EmployeeList[]>(formData.employees || []);
+    useEffect(() => {
+        if (formData.employees) {
+            setEmployees(formData.employees);
+        }
+    }, [formData.employees]); // Dependency array
+
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
 
+    const handleAddEmployee = (event: React.FormEvent) => {
+        event.preventDefault();
+        const newId = `00${formData.employees ? formData.employees.length + 1 : 1}`;
+        const employeeToAdd = { ...newEmployee, id: newId };
+
+        // Update the context's formData with the new employee list
+        const updatedEmployees = [...(formData.employees || []), employeeToAdd];
+        updateFormData({ ...formData, employees: updatedEmployees });
+
+        setShowModal(false); // Close the modal
+        setNewEmployee({ firstName: '', lastName: '', phoneNumber: '' }); // Reset form
+    };
+
+    const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewEmployee({ ...newEmployee, [event.target.name]: event.target.value });
+    };
+
     return (
         <div className="lex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">
-
             <div className="h-[6%] rounded-[5px] mb-3">
-                <h1 className="text-left text-[34px]">
-                    My Employees
-                </h1>
+                <h1 className="text-left text-[34px]">My Employees</h1>
             </div>
 
             <div className="h-[42px] mb-2 flex">
-                <div className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px] drop-shadow" >
-                    <button className="p-2" onClick={() => navigate('/admin/sites/create')}>
+                <div
+                    className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px] drop-shadow">
+                    <button className="p-2" onClick={() => setShowModal(true)}>
                         <img src={AddSite} alt="Add" className="inline mr-2"/>
                         Add Employee
                     </button>
                 </div>
-                <div className="flex-1 ml-2 max-w-96" >
+                <div className="flex-1 ml-2 max-w-96">
                     <input
                         type="text"
                         placeholder="Search Employees..."
@@ -52,15 +62,49 @@ const Employees = () => {
                         className="w-full p-2 h-full rounded-[5px] drop-shadow"
                     />
                 </div>
-
             </div>
+
+            {/* Modal for adding a new employee */}
+            {showModal && (
+                <div
+                    className="absolute top-0 left-0 right-0 bottom-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-5 rounded-lg">
+                        <form onSubmit={handleAddEmployee}>
+                        <input
+                                type="text"
+                                name="firstName"
+                                placeholder="First Name"
+                                value={newEmployee.firstName}
+                                onChange={handleFormChange}
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="lastName"
+                                placeholder="Last Name"
+                                value={newEmployee.lastName}
+                                onChange={handleFormChange}
+                                required
+                            />
+                            <input
+                                type="tel"
+                                name="phoneNumber"
+                                placeholder="Phone Number"
+                                value={newEmployee.phoneNumber}
+                                onChange={handleFormChange}
+                                required
+                            />
+                            <button type="submit">Add Employee</button>
+                            <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             <div className="bg-white h-[87%] rounded-[5px] overflow-auto">
                 <DisplayEmployeeList employees={employees} searchTerm={searchTerm}/>
             </div>
-
         </div>
-
     );
 };
 

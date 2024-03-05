@@ -28,8 +28,10 @@ export const FormProvider: React.FC<AppProviderProps> = ({ children }) => {
         email: '',
         siteName: '',
         siteLocation: '',
+        sites: [],
         siteMedia: [],
         siteAccess: [],
+        employees: [],
 
     });
     const updateFormData = (updates: { [key: string]: any }) => {

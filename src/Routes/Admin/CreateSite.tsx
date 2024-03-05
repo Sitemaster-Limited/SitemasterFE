@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PostSite} from "../../Services/PostSite";
 import {useFormContext} from "../../Context/LocalObjectForm";
 
@@ -6,12 +6,21 @@ import EmployeeSelection from "../../Components/EmployeeSelection";
 
 import QRCode from "qrcode.react";
 import {EmployeeList} from "../../Utility/GlobalTypes";
+import {useSiteData} from "../../Hooks/SiteData";
 
 const CreateSite = () => {
 
     const {formData, updateFormData} = useFormContext();
     const [showQR, setShowQR] = useState(false);
     const [siteId, setSiteId] = useState('');
+    const apiData = useSiteData(formData);
+
+    const [employees, setEmployees] = useState<EmployeeList[]>(formData.employees || []);
+    useEffect(() => {
+        if (formData.employees) {
+            setEmployees(formData.employees);
+        }
+    }, [formData.employees]); // Dependency array
 
     const generateUniqueId = (name: string) => {
         return btoa(name).substring(0, 12); // Fine Encoding for now
@@ -29,17 +38,11 @@ const CreateSite = () => {
         setSiteId(uniqueSiteId);
         setShowQR(true);
 
-        PostSite(name, uniqueSiteId).then(() => console.log("Upload handled"));
+        console.log(apiData);
+        updateFormData({ sites: [...(formData.sites || []), apiData] });
+
+        //PostSite(name, uniqueSiteId).then(() => console.log("Upload handled"));
     };
-
-    const employees: EmployeeList[] = [
-        { id: '001', firstName: 'Ethan ', lastName: 'Fifle', phoneNumber: '123-423-4534' },
-        { id:'002', firstName: 'Ilija', lastName: 'rasta', phoneNumber: '123-443-5434' },
-        { id:'003', firstName: 'Andrew', lastName: 'brown', phoneNumber: '443-244-3434' },
-        { id:'004', firstName: 'Jakub', lastName: 'smith', phoneNumber: '436-764-9753' },
-
-        // ... other properties
-    ];
 
     return (
         <div className="flex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">

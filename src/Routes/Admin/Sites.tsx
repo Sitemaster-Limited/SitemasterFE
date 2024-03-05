@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SiteList } from '../../Utility/GlobalTypes';
+import { useFormContext } from "../../Context/LocalObjectForm";
+import {EmployeeList, SiteList} from '../../Utility/GlobalTypes';
 
 import DisplaySiteList from '../../Components/DisplaySiteList';
 import AddSite from '../../Images/AddSite.png';
@@ -10,14 +11,23 @@ const Sites = () => {
 
     const navigate = useNavigate();
 
-    const sites: SiteList[] = [
-        { id: '001', name: 'Hillside Villa', date: '15-06-2023', status: 'Active' },
-        { id:'002', name: 'Adela Villa', date: '17-06-2023', status: 'Saved' },
-        { id:'003', name: 'Cakes Villa', date: '12-06-2023', status: 'Inactive' },
-        { id:'004', name: 'Bakers Villa', date: '18-06-2023', status: 'Active' },
-
-        // ... other properties
-    ];
+    const { formData } = useFormContext();
+    const [sites, setSites] = useState<SiteList[]>([]);
+    useEffect(() => {
+        if (formData.sites && formData.sites.length) {
+            const transformedSites: SiteList[] = formData.sites.map((site, index): SiteList => {
+                const id = (index + 1).toString().padStart(3, '0');
+                const name = site.siteInfo?.siteName; // Use optional chaining and fallback
+                return {
+                    id: id,
+                    name: name,
+                    date: new Date().toLocaleDateString(),
+                    status: "Active",
+                };
+            });
+            setSites(transformedSites);
+        }
+    }, [formData.sites]);
 
     // State to hold the search term
     const [searchTerm, setSearchTerm] = useState("");
@@ -38,13 +48,14 @@ const Sites = () => {
             </div>
 
             <div className="h-[42px] mb-2 flex">
-                <div className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px] drop-shadow" >
+                <div
+                    className="flex-1 bg-white max-w-36 justify-center items-center text-custom-grey rounded-[5px] drop-shadow">
                     <button className="p-2" onClick={() => navigate('/admin/sites/create')}>
                         <img src={AddSite} alt="Add" className="inline mr-2"/>
                         New Site
                     </button>
                 </div>
-                <div className="flex-1 ml-2 max-w-96" >
+                <div className="flex-1 ml-2 max-w-96">
                     <input
                         type="text"
                         placeholder="Search Sites..."
