@@ -60,7 +60,7 @@ const ClockTime = () => {
                     </div>
 
                     {location && (
-                        <p>Location: Latitude: {location.latitude}, Longitude: {location.longitude} Accuracy: {location.accuracy}</p>
+                        <p>Location: Latitude: {location.latitude}, Longitude: {location.longitude} Accuracy: +/- {location.accuracy} meters</p>
                     )}
 
                 </div>
