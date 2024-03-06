@@ -3,23 +3,26 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { FormProvider } from "./Context/LocalObjectForm";
 
 import LoginPage from "./Routes/Initial/LoginPage";
-import SitePage from "./Routes/Initial/SitePage";
-import AdministratorPage from "./Routes/Initial/Administrator";
+import SiteRoutes from "./Routes/User/UserRoutes";
+import AdminRoutes from "./Routes/Admin/AdminRoutes";
 import Navbar from "./Components/Navbar";
+import SiteHeader from "./Components/SiteHeader"
 
 import './Styling/App.css';
 
 function AppWithNavbar() {
     const location = useLocation();
     const isAdminRoute = location.pathname.startsWith('/admin'); // Check if the path starts with /admin
+    const isSiteRoute = location.pathname.startsWith('/site'); // Check if the path starts with /admin
 
     return (
         <div className="App">
             {isAdminRoute && <Navbar />}
+            {isSiteRoute && <SiteHeader />}
             <Routes>
                 <Route path="/" element={<LoginPage />} />
-                <Route path="/site" element={<SitePage />} />
-                <Route path="/admin/*" element={<AdministratorPage />} /> {/* Notice the /* for nested routing */}
+                <Route path="/site/*" element={<SiteRoutes />} />
+                <Route path="/admin/*" element={<AdminRoutes />} /> {/* Notice the /* for nested routing */}
             </Routes>
         </div>
     );
