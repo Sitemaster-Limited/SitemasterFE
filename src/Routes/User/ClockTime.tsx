@@ -41,23 +41,23 @@ const ClockTime = () => {
         <>
             <div className="bg-custom-bg flex flex-col h-screen mt-20">
                 <div className="mt-2 px-4">
-                    <div className="bg-white w-full rounded-lg shadow-md flex items-center justify-center p-4 mb-4">
-                        <button onClick={handleClockIn} className="flex flex-row bg-grey-200 items-center justify-center">
+                    <button onClick={handleClockIn} className="bg-white w-full rounded-lg shadow-md flex items-center justify-center p-4 mb-4">
+                        <div className="flex flex-row bg-grey-200 items-center justify-center">
                             <div className="flex items-center justify-center rounded-full mr-3">
                                 <img src={Clock} alt="TIME" className="rounded-[5px] w-full"/>
                             </div>
                             Clock-In
-                        </button>
-                    </div>
+                        </div>
+                    </button>
 
-                    <div className="bg-white w-full rounded-lg shadow-md flex items-center justify-center p-4">
-                        <button className="flex flex-row bg-grey-200 items-center justify-center">
+                    <button className="bg-white w-full rounded-lg shadow-md flex items-center justify-center p-4">
+                        <div className="flex flex-row bg-grey-200 items-center justify-center">
                             <div className="flex items-center justify-center rounded-full mr-3">
                                 <img src={Clock} alt="TIME" className="rounded-[5px] w-full"/>
                             </div>
                             Clock-Out
-                        </button>
-                    </div>
+                        </div>
+                    </button>
 
                     {location && (
                         <p>Location: Latitude: {location.latitude}, Longitude: {location.longitude} Accuracy: +/- {location.accuracy} meters</p>

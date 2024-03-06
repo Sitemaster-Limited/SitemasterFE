@@ -42,21 +42,21 @@ const SitePage = () => {
         <>
             <div className="flex flex-col bg-custom-bg h-screen mt-20">
                 <div className="grid grid-cols-2 mt-2 gap-4 px-4">
-                    <div className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
-                        <button onClick={() => navigate(`time`)} className="flex flex-col items-center justify-center">
+                    <button onClick={() => navigate(`time`)} className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
+                        <div className="flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center rounded-full mb-2">
                                 <img src={Time} alt="TIME" className="pt-1 rounded-[5px] w-full"/>
                             </div>
-                        </button>
-                    </div>
+                        </div>
+                    </button>
 
-                    <div className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
-                        <button className="flex flex-col items-center justify-center">
+                    <button className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
+                        <div className="flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center rounded-full mb-2">
                                 <img src={Blueprint} alt="BlUEPRINTS" className="pt-1 rounded-[5px] w-full"/>
                             </div>
-                        </button>
-                    </div>
+                        </div>
+                    </button>
 
                 </div>
             </div>
