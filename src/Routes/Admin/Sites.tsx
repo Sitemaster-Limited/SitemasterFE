@@ -10,19 +10,17 @@ import Archive from '../../Images/Archive.png';
 const Sites = () => {
 
     const navigate = useNavigate();
-
     const { formData } = useFormContext();
     const [sites, setSites] = useState<SiteList[]>([]);
+
     useEffect(() => {
-        if (formData.sites && formData.sites.length) {
-            const transformedSites: SiteList[] = formData.sites.map((site, index): SiteList => {
-                const id = (index + 1).toString().padStart(3, '0');
-                const name = site.siteInfo?.siteName; // Use optional chaining and fallback
+        if (formData.sites) {
+            const transformedSites: SiteList[] = formData.sites.map((site): SiteList => {
                 return {
-                    id: id,
-                    name: name,
-                    date: new Date().toLocaleDateString(),
-                    status: "Active",
+                    id: site.siteInfo.siteId,
+                    name: site.siteInfo.siteName,
+                    date: site.siteInfo.dateCreated,
+                    status: site.siteInfo.siteStatus,
                 };
             });
             setSites(transformedSites);

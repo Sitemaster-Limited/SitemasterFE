@@ -7,8 +7,8 @@ export const useSiteData = (formData: Partial<FormData>) => {
     // left-hand side must match database field
     return useMemo(() => ({
         siteInfo: {
-            siteId: formData.siteId || "default_ID",
-            dateCreated: formData.dateCreated || "unknown",
+            siteId: formData.siteId || "unknown",
+            dateCreated: formData.dateCreated || new Date().toLocaleDateString(),
             siteName: formData.siteName || "default_site_name",
             siteLocation: formData.siteLocation || "default_site_location",
             siteStatus: formData.siteStatus || "Active",

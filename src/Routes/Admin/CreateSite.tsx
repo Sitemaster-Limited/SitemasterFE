@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {PostSite} from "../../Services/PostSite";
 import {useFormContext} from "../../Context/LocalObjectForm";
 
 import EmployeeSelection from "../../Components/EmployeeSelection";
@@ -8,11 +7,12 @@ import QRCode from "qrcode.react";
 import {Employee} from "../../Utility/GlobalTypes";
 import {useSiteData} from "../../Hooks/SiteData";
 
+import AddSite from "../../Services/AddSite";
+
 const CreateSite = () => {
 
     const {formData, updateFormData} = useFormContext();
     const [showQR, setShowQR] = useState(false);
-    const [siteId, setSiteId] = useState('');
     const apiData = useSiteData(formData);
 
     const [employees, setEmployees] = useState<Employee[]>(formData.employees || []);
@@ -20,29 +20,43 @@ const CreateSite = () => {
         if (formData.employees) {
             setEmployees(formData.employees);
         }
-    }, [formData.employees]); // Dependency array
+    }, [formData.employees]);
 
     const generateUniqueId = (name: string) => {
         return btoa(name).substring(0, 12); // Fine Encoding for now
     };
 
+    // State to track if the QR code generation was triggered
+    const [qrGenerationInitiated, setQrGenerationInitiated] = useState(false);
+
     const handleGenerateQR = () => {
-
         const name = String(formData.siteName);
-
-        if (!name.trim()) { // Check if the name is empty or just whitespace
-            alert('Please enter a name before generating a QR code.'); // Prompt the user
-            return; // Exit the function early
+        if (!name.trim()) {
+            alert('Please enter a name before generating a QR code.');
+            return;
         }
-        const uniqueSiteId = generateUniqueId(name);
-        setSiteId(uniqueSiteId);
+
+        updateFormData({
+            siteId: generateUniqueId(name),
+            dateCreated: new Date().toLocaleDateString(),
+            siteStatus: "Active"
+        });
+
         setShowQR(true);
-
-        console.log(apiData);
-        updateFormData({ sites: [...(formData.sites || []), apiData] });
-
-        //PostSite(name, uniqueSiteId).then(() => console.log("Upload handled"));
+        setQrGenerationInitiated(true); // Set the flag to true
     };
+
+    useEffect(() => {
+        if (qrGenerationInitiated) {
+            // Now this block runs after formData has been updated, and consequently, apiData
+            AddSite(apiData, formData.email || ""); // need to change from email to id at some point
+            updateFormData({sites: [...(formData.sites || []), apiData]});
+
+            setQrGenerationInitiated(false); // Reset the flag
+            // Implement clear the form here if needed
+        }
+    }, [qrGenerationInitiated, apiData, formData.email, formData.sites, updateFormData]); // Depend on qrGenerationInitiated and potentially apiData
+
 
     return (
         <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2">
@@ -120,8 +134,8 @@ const CreateSite = () => {
                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Generate QR Code
                     </button>
-                    {showQR && siteId && (
-                        <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${siteId}`} className="mt-4"/>
+                    {showQR && (
+                        <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${formData.siteId}`} className="mt-4"/>
                     )}
                 </div>
             </div>

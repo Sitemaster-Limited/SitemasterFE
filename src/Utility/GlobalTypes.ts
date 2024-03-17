@@ -40,10 +40,12 @@ export type Account = {
 
 export type Site = {
     siteInfo: {
+        siteId: string;
+        dateCreated: string;
         siteName: string;
         siteLocation: string;
-        siteStatus: string;
-        siteMedia: [];
+        siteStatus: 'Active' | 'Saved' | 'Inactive' | '';
+        bluePrints: [];
     };
     siteAccess: [];
 }
