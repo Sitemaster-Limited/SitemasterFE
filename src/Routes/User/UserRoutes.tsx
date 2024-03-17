@@ -1,24 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import SitePage from './SitePage';
 import ClockTime from "./ClockTime";
-
+import DefaultSignIn from "./DefaultSignIn";
 
 const SiteRoutes = () => {
-
-    const siteName = "default";
-
-    return (
-        <>
-            <Routes>
-                <Route path="/" element={<Navigate replace to={siteName} />} />
-                <Route path={siteName} element={<SitePage />} />
-                <Route path={`/${siteName}/time`} element={<ClockTime />} />
-            </Routes>
-
-        </>
-
-    );
+  return (
+    <Routes>
+      <Route path="/" element={<DefaultSignIn />} />
+      <Route path="/site" element={<SitePage />} />
+      <Route path="/site/time" element={<ClockTime />} />
+    </Routes>
+  );
 };
 
 export default SiteRoutes;

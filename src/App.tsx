@@ -13,7 +13,7 @@ import './Styling/App.css';
 function AppWithNavbar() {
     const location = useLocation();
     const isAdminRoute = location.pathname.startsWith('/admin'); // Check if the path starts with /admin
-    const isSiteRoute = location.pathname.startsWith('/site'); // Check if the path starts with /admin
+    const isSiteRoute = location.pathname.startsWith('/login'); // Check if the path starts with /admin
 
     return (
         <div className="App">
@@ -21,7 +21,7 @@ function AppWithNavbar() {
             {isSiteRoute && <SiteHeader />}
             <Routes>
                 <Route path="/" element={<LoginPage />} />
-                <Route path="/site/*" element={<SiteRoutes />} />
+                <Route path="/login/*" element={<SiteRoutes />} />
                 <Route path="/admin/*" element={<AdminRoutes />} /> {/* Notice the /* for nested routing */}
             </Routes>
         </div>

@@ -135,7 +135,7 @@ const CreateSite = () => {
                         Generate QR Code
                     </button>
                     {showQR && (
-                        <QRCode value={`${process.env.REACT_APP_FE_URL}/site?siteId=${formData.siteId}`} className="mt-4"/>
+                        <QRCode value={`${process.env.REACT_APP_FE_URL}/login/site?siteId=${formData.siteId}&clientId=${formData.email}`} className="mt-4"/>
                     )}
                 </div>
             </div>

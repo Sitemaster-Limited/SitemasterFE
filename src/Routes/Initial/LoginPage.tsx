@@ -17,7 +17,7 @@ const LoginPage = () => {
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-[5px]">
                         General Contractors
                     </button>
-                    <button onClick={() => navigate('/site')}
+                    <button onClick={() => navigate('/login')}
                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-[5px]">
                         On Site Workers
                     </button>

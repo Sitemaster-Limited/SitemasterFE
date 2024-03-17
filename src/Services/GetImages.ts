@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 
-export const GetSites = async (): Promise<{ key: string; siteName: string }[]> => {
+export const GetImages = async (): Promise<{ key: string; siteName: string }[]> => {
     const S3_BUCKET = "sitemaster.beta";
     const REGION = "us-east-1";
 
