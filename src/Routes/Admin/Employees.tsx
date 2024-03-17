@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
-import { EmployeeList } from "../../Utility/GlobalTypes";
+import { Employee } from "../../Utility/GlobalTypes";
 import { useFormContext } from "../../Context/LocalObjectForm";
 import DisplayEmployeeList from "../../Components/DisplayEmployeeList";
 import AddSite from "../../Images/AddSite.png";
+
+import AddEmployee from "../../Services/AddEmployee";
 
 const Employees = () => {
 
@@ -11,7 +13,7 @@ const Employees = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
-    const [employees, setEmployees] = useState<EmployeeList[]>(formData.employees || []);
+    const [employees, setEmployees] = useState<Employee[]>(formData.employees || []);
     useEffect(() => {
         if (formData.employees) {
             setEmployees(formData.employees);
@@ -24,8 +26,11 @@ const Employees = () => {
 
     const handleAddEmployee = (event: React.FormEvent) => {
         event.preventDefault();
+        // will need to change (good for handling 999 employees id should be generated)
         const newId = `00${formData.employees ? formData.employees.length + 1 : 1}`;
-        const employeeToAdd = { ...newEmployee, id: newId };
+        const employeeToAdd = { ...newEmployee, employeeId: newId };
+
+        AddEmployee(formData.email || "", employeeToAdd).then(() => console.log("Employee Added"));
 
         // Update the context's formData with the new employee list
         const updatedEmployees = [...(formData.employees || []), employeeToAdd];

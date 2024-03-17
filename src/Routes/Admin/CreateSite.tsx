@@ -5,7 +5,7 @@ import {useFormContext} from "../../Context/LocalObjectForm";
 import EmployeeSelection from "../../Components/EmployeeSelection";
 
 import QRCode from "qrcode.react";
-import {EmployeeList} from "../../Utility/GlobalTypes";
+import {Employee} from "../../Utility/GlobalTypes";
 import {useSiteData} from "../../Hooks/SiteData";
 
 const CreateSite = () => {
@@ -15,7 +15,7 @@ const CreateSite = () => {
     const [siteId, setSiteId] = useState('');
     const apiData = useSiteData(formData);
 
-    const [employees, setEmployees] = useState<EmployeeList[]>(formData.employees || []);
+    const [employees, setEmployees] = useState<Employee[]>(formData.employees || []);
     useEffect(() => {
         if (formData.employees) {
             setEmployees(formData.employees);

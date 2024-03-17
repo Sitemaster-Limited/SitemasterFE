@@ -28,6 +28,7 @@ export const FormProvider: React.FC<AppProviderProps> = ({ children }) => {
         email: '',
         siteName: '',
         siteLocation: '',
+        siteStatus: '',
         sites: [],
         siteMedia: [],
         siteAccess: [],

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { EmployeeList, SimpleSort, EmployeeListProps } from '../Utility/GlobalTypes';
+import { Employee, SimpleSort, EmployeeListProps } from '../Utility/GlobalTypes';
 import { sortEmployees } from '../Utility/EmployeeListHandler';
 
 import UpArrow from '../Images/UpArrow.png';
@@ -7,7 +7,7 @@ import DownArrow from '../Images/DownArrow.png';
 import EmployeeAction from "./EmployeeAction";
 
 const DisplaySiteList: React.FC<EmployeeListProps> = ({ employees, searchTerm }) => {
-    const [sortedList, setSortedList] = useState<EmployeeList[]>(employees);
+    const [sortedList, setSortedList] = useState<Employee[]>(employees);
     const [smplSort, setDirection] = useState<SimpleSort>({ key: null, direction: null });
 
     useEffect(() => {

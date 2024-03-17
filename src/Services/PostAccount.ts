@@ -2,7 +2,7 @@ import { Account } from "../Utility/GlobalTypes";
 
 const postAccount = async (apiData: Account): Promise<string | null> => {
     try {
-        const response = await fetch(`${process.env.REACT_APP_SELLSTATICBE_URL}/Customer`, {
+        const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

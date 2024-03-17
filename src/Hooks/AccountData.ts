@@ -4,6 +4,7 @@ import { FormData } from '../Utility/FormInput';
 export const useAccountData = (formData: Partial<FormData>) => {
 
     // Dependency on formData
+    // Customer model in the BE
     return useMemo(() => ({
         id: formData.id || "default_id",
         administrator: {

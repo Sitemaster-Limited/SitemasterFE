@@ -9,6 +9,7 @@ export interface FormData {
     // Site Info
     siteName: string;
     siteLocation: string;
+    siteStatus: string;
     siteMedia: [];
     sites: Site[];
     siteAccess: [];

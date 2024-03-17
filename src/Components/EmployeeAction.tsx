@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { EmployeeList } from '../Utility/GlobalTypes';
+import { Employee } from '../Utility/GlobalTypes';
 
 type ActionItemProps = {
-    employee: EmployeeList;
+    employee: Employee;
 };
 
 const ActionItem: React.FC<ActionItemProps> = ({ employee }) => {
@@ -31,12 +31,12 @@ const ActionItem: React.FC<ActionItemProps> = ({ employee }) => {
 
     const handleEdit = () => {
         // Implement edit logic here
-        alert(`Editing property ${employee.id}`);
+        alert(`Editing property ${employee.employeeId}`);
     };
 
     const handleDelete = () => {
         // Implement view logic here
-        alert(`Viewing property ${employee.id}`);
+        alert(`Viewing property ${employee.employeeId}`);
     };
 
     return (

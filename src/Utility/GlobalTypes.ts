@@ -5,15 +5,15 @@ export type SiteList = {
     status: 'Active' | 'Saved' | 'Inactive' | '';
 };
 
-export type EmployeeList = {
-    id: string;
+export type Employee = {
+    employeeId: string;
     firstName: string;
     lastName: string;
     phoneNumber: string;
 };
 
 export type SimpleSort = {
-    key: keyof SiteList | keyof EmployeeList | null;
+    key: keyof SiteList | keyof Employee | null;
     direction: 'asc' | 'desc' | null;
 };
 
@@ -23,7 +23,7 @@ export type SiteListProps = {
 };
 
 export type EmployeeListProps = {
-    employees: EmployeeList[];
+    employees: Employee[];
     searchTerm?: string;
 };
 
@@ -42,6 +42,7 @@ export type Site = {
     siteInfo: {
         siteName: string;
         siteLocation: string;
+        siteStatus: string;
         siteMedia: [];
     };
     siteAccess: [];

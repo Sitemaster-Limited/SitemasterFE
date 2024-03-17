@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from "../../Context/LocalObjectForm";
-import {EmployeeList, SiteList} from '../../Utility/GlobalTypes';
+import {SiteList} from '../../Utility/GlobalTypes';
 
 import DisplaySiteList from '../../Components/DisplaySiteList';
 import AddSite from '../../Images/AddSite.png';
@@ -39,7 +39,7 @@ const Sites = () => {
     };
 
     return (
-        <div className="lex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">
+        <div className="flex flex-col bg-custom-bg h-screen mt-16 md:mt-0 md:ml-64 p-2">
 
             <div className="h-[6%] rounded-[5px] mb-3">
                 <h1 className="text-left text-[34px]">

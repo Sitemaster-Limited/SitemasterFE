@@ -28,12 +28,12 @@ const EmployeeSelection: React.FC<EmployeeListProps> = ({ employees }) => {
                     {showDropdown && ( // This will conditionally render the dropdown based on `showDropdown` state
                         <div className="max-h-48 overflow-auto">
                             {employees.map(employee => (
-                                <label key={employee.id} className="block px-2 py-1">
+                                <label key={employee.employeeId} className="block px-2 py-1">
                                     <input
                                         type="checkbox"
                                         className="mr-2"
-                                        checked={selectedEmployees.includes(employee.id)}
-                                        onChange={() => handleCheckboxChange(employee.id)}
+                                        checked={selectedEmployees.includes(employee.employeeId)}
+                                        onChange={() => handleCheckboxChange(employee.employeeId)}
                                     />
                                     {`${employee.firstName} ${employee.lastName}`}
                                 </label>

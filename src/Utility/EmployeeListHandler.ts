@@ -1,10 +1,10 @@
-import { SimpleSort, EmployeeList } from "./GlobalTypes";
+import { SimpleSort, Employee } from "./GlobalTypes";
 import { Dispatch, SetStateAction } from 'react';
 
 // Define the function types for setting state
-type SetSortedListFunc = Dispatch<SetStateAction<EmployeeList[]>>;
+type SetSortedListFunc = Dispatch<SetStateAction<Employee[]>>;
 type SetDirectionFunc = Dispatch<SetStateAction<SimpleSort>>;
-export const sortEmployees = (key: keyof EmployeeList, smplSort: SimpleSort, employees: EmployeeList[], setSortedList: SetSortedListFunc, setDirection: SetDirectionFunc) => {
+export const sortEmployees = (key: keyof Employee, smplSort: SimpleSort, employees: Employee[], setSortedList: SetSortedListFunc, setDirection: SetDirectionFunc) => {
     let direction: 'asc' | 'desc' | null = smplSort.direction;
     if (smplSort.key === key) {
         switch (smplSort.direction) {
