@@ -7,9 +7,11 @@ export interface FormData {
     phoneNumber: string;
     email: string;
     // Site Info
+    siteId: string;
     siteName: string;
     siteLocation: string;
     siteStatus: string;
+    dateCreated: string;
     siteMedia: [];
     sites: Site[];
     siteAccess: [];
