@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Sites from '../Admin/Sites';
-import CreateSite from "../Admin/CreateSite";
-import Settings from '../Admin/Settings';
-import Employees from '../Admin/Employees';
+import Sites from './Sites';
+import CreateSite from "./CreateSite";
+import Settings from './Settings';
+import Employees from './Employees';
 
 const AdministratorPage = () => {
 
