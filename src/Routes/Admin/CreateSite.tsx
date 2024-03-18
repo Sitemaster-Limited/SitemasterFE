@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {useFormContext} from "../../Context/LocalObjectForm";
-
-import EmployeeSelection from "../../Components/EmployeeSelection";
+import {useSiteData} from "../../Hooks/SiteData";
+import {Employee} from "../../Utility/GlobalTypes";
 
 import QRCode from "qrcode.react";
-import {Employee} from "../../Utility/GlobalTypes";
-import {useSiteData} from "../../Hooks/SiteData";
-
 import AddSite from "../../Services/AddSite";
+import GenerateSiteId from "../../Utility/GenerateSiteId";
+import EmployeeSelection from "../../Components/EmployeeSelection";
 
 const CreateSite = () => {
 
@@ -22,9 +21,6 @@ const CreateSite = () => {
         }
     }, [formData.employees]);
 
-    const generateUniqueId = (name: string) => {
-        return btoa(name).substring(0, 12); // Fine Encoding for now
-    };
 
     // State to track if the QR code generation was triggered
     const [qrGenerationInitiated, setQrGenerationInitiated] = useState(false);
@@ -37,7 +33,7 @@ const CreateSite = () => {
         }
 
         updateFormData({
-            siteId: generateUniqueId(name),
+            siteId: GenerateSiteId(name),
             dateCreated: new Date().toLocaleDateString(),
             siteStatus: "Active"
         });
@@ -135,7 +131,7 @@ const CreateSite = () => {
                         Generate QR Code
                     </button>
                     {showQR && (
-                        <QRCode value={`${process.env.REACT_APP_FE_URL}/login/site?siteId=${formData.siteId}&clientId=${formData.email}`} className="mt-4"/>
+                        <QRCode value={`${process.env.REACT_APP_FE_URL}login/site?siteId=${formData.siteId}&clientId=${formData.email}`} className="mt-4"/>
                     )}
                 </div>
             </div>

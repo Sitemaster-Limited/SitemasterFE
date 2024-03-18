@@ -45,7 +45,7 @@ const Employees = () => {
     };
 
     return (
-        <div className="lex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2">
+        <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2">
             <div className="h-[6%] rounded-[5px] mb-3">
                 <h1 className="text-left text-[34px]">My Employees</h1>
             </div>
