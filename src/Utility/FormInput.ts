@@ -12,7 +12,7 @@ export interface FormData {
     siteLocation: string;
     siteStatus: string;
     dateCreated: string;
-    siteMedia: [];
+    siteMedia: string[];
     sites: Site[];
     siteAccess: [];
     // Employees List

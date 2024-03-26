@@ -50,5 +50,13 @@ export type Site = {
     siteAccess: [];
 }
 
+export type S3Upload = {
+    SiteId: string;
+    Type: string;
+    Clint: string;
+    Images: File[];
+
+}
+
 
 
