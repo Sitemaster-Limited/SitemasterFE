@@ -9,6 +9,7 @@ import PostImages from "../../Services/PostImages";
 import GenerateSiteId from "../../Utility/GenerateSiteId";
 import EmployeeSelection from "../../Components/EmployeeSelection";
 import {useAuth} from "@clerk/clerk-react";
+import GetImages from "../../Services/GetImages";
 
 const CreateSite = () => {
 
@@ -61,20 +62,45 @@ const CreateSite = () => {
   };
 
   useEffect(() => {
-    if (qrGenerationInitiated) {
-      // Now this block runs after formData has been updated, and consequently, apiData
-      AddSite(apiData, formData.email || "",); // need to change from email to id at some point
-      PostImages(formData.siteId,
-        formData.email,
-        files,
-        token,
-        "Blueprints").then(() => console.log("image posted"));
-      updateFormData({sites: [...(formData.sites || []), apiData]});
+    // Define an async function that handles the sequence of operations
+    let isProcessInitiated = false; // Local flag to ensure process is initiated only once
+    const handleImageAndSiteProcess = async () => {
+      if (qrGenerationInitiated && !isProcessInitiated) {
+        try {
+          // First, upload the images
+          await PostImages(
+            String(formData.siteId),
+            String(formData.email),
+            files,
+            token,
+            "Blueprints"
+          );
+          console.log("Images posted");
 
-      setQrGenerationInitiated(false); // Reset the flag
-      // Implement clear the form here if needed
-    }
-  }, [qrGenerationInitiated, apiData, formData.email, formData.sites, updateFormData]); // Depend on qrGenerationInitiated and potentially apiData
+          const imagesInfo = await GetImages(
+            String(formData.siteId),
+            String(formData.email),
+            "Blueprints"
+          );
+          console.log("Images fetched", imagesInfo.preSignedUrls);
+          apiData.siteInfo.bluePrints = imagesInfo.preSignedUrls;
+          console.log(apiData);
+          await AddSite(apiData,  String(formData.email));
+          console.log("Site added");
+
+          updateFormData({sites: [...(formData.sites || []), apiData]});
+
+        } catch (error) {
+          console.error("Error in processing:", error);
+        } finally {
+          setQrGenerationInitiated(false);
+        }
+      }
+    };
+
+    handleImageAndSiteProcess();
+  }, [qrGenerationInitiated]);
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -88,10 +114,6 @@ const CreateSite = () => {
     const newFiles = files.filter((_, i) => i !== index);
     setFiles(newFiles);
   };
-
-  useEffect(() => {
-    updateFormData({siteMedia: files});
-  }, [files]);
 
   return (
     <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2">

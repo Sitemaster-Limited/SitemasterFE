@@ -65,7 +65,7 @@ const DisplaySiteList: React.FC<SiteListProps> = ({ sites, searchTerm }) => {
                         <td className="text-left pl-8">{site.name}</td>
                         <td className="text-left pl-8">{site.date}</td>
                         <td className="text-left pl-6">
-                            <span className={`px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-${site.status.toLowerCase()}-200 text-${site.status.toLowerCase()}-800`}>
+                            <span className={`px-4 py-1 inline-flex text-xs leading-5 font-semibold rounded-full text-${site.status.toLowerCase()}-800`}>
                               {site.status}
                             </span>
                         </td>

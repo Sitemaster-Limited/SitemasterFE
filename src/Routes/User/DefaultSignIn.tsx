@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GetSite from "../../Services/GetSite";
-
 
 const DefaultSignIn = () => {
   const [siteId, setSiteId] = useState('');

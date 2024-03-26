@@ -1,8 +1,7 @@
-import {S3Upload} from "../Utility/GlobalTypes";
 
 const PostImages = async (
-  siteId: string | undefined,
-  client: string | undefined,
+  siteId: string,
+  client: string,
   images: File[] | null,
   token: string,
   type: string,
@@ -14,19 +13,21 @@ const PostImages = async (
     }
 
     const formData = new FormData();
-    formData.append("SiteId", siteId || "default");
+    formData.append("SiteId", siteId);
     formData.append("Type", type);
-    formData.append("Client", client || "default");
-    console.log(images.length);
+    formData.append("Client", client);
     for (let i = 0; i < images.length; i++) {
       formData.append("Images", images[i]);
     }
 
+    const entries = Array.from(formData.entries());
+    for (let [key, value] of entries) {
+      console.log(`${key}: ${value}`);
+    }
     const response = await fetch(`${process.env.REACT_APP_BE_URL}/S3`, {
       method: 'POST',
       headers: {
-        //Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data'
+        Authorization: `Bearer ${token}`,
       },
       body: formData
     });

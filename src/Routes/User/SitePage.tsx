@@ -1,51 +1,33 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
-import { Employee, Site} from "../../Utility/GlobalTypes";
-import GetSite from "../../Services/GetSite";
+import {useNavigate} from 'react-router-dom';
+import {Employee} from "../../Utility/GlobalTypes";
+import {useSiteDetails} from "../../Context/SiteDetails";
 
 import Blueprint from '../../Images/Blueprints.png';
 import Time from '../../Images/Time.png';
 
 const SitePage = () => {
-  const [siteName, setSiteName] = useState('');
-  const [loading, setLoading] = useState(true);
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isVerified, setIsVerified] = useState(false);
-  const [siteDetails, setSiteDetails] = useState<Site | null>(null)
+  const {siteDetails, loading} = useSiteDetails();
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSiteDetails = async () => {
-      setLoading(true);
-      const searchParams = new URLSearchParams(location.search);
-      const siteId = searchParams.get('siteId');
-      const clientId = searchParams.get('clientId');
-
-      if (!siteId || !clientId) {
-        console.error("Site ID or Client ID is missing from the URL.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const details = await GetSite(siteId, clientId);
-        setSiteDetails(details);
-        setSiteName(details.siteInfo.siteName);
-      } catch (error) {
-        console.error("An error occurred while fetching site details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSiteDetails();
-  }, [location.search]);
+    // Check if the user has already verified
+    const verifiedPhoneNumber = localStorage.getItem('verifiedPhoneNumber');
+    if (verifiedPhoneNumber) {
+      setPhoneNumber(verifiedPhoneNumber);
+      setIsVerified(true);
+    }
+  }, []);
 
   const verifyPhoneNumber = () => {
     if (siteDetails && siteDetails.siteAccess.some((employee: Employee) => employee.phoneNumber === phoneNumber)) {
       setIsVerified(true);
+      // Store verification status in local storage
+      localStorage.setItem('verifiedPhoneNumber', phoneNumber);
     } else {
       alert("Phone number not found. Please try again.");
     }
@@ -79,7 +61,7 @@ const SitePage = () => {
   return (
     <div className="flex flex-col bg-custom-bg h-screen mt-20">
       <div>
-        <p>{siteName}</p>
+        <p>{siteDetails?.siteInfo?.siteName}</p>
       </div>
       <div className="grid grid-cols-2 mt-2 gap-4 px-4">
         <button onClick={() => navigate(`time`)}
@@ -91,8 +73,8 @@ const SitePage = () => {
           </div>
         </button>
 
-        <button
-          className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
+        <button onClick={() => navigate(`blueprints`)}
+                className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
           <div className="flex flex-col items-center justify-center">
             <div className="flex items-center justify-center rounded-full mb-2">
               <img src={Blueprint} alt="BlUEPRINTS" className="pt-1 rounded-[5px] w-full"/>
@@ -101,7 +83,6 @@ const SitePage = () => {
         </button>
       </div>
     </div>
-
   );
 };
 
