@@ -10,20 +10,12 @@ import Blueprint from '../../Images/Blueprints.png';
 
 const SitePage = () => {
 
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [isVerified, setIsVerified] = useState(false);
+  const initialPhoneNumber = localStorage.getItem('verifiedPhoneNumber') || '';
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber);
+  const [isVerified, setIsVerified] = useState(!!initialPhoneNumber);
   const {siteDetails, loading} = useSiteDetails();
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check if the user has already verified
-    const verifiedPhoneNumber = localStorage.getItem('verifiedPhoneNumber');
-    if (verifiedPhoneNumber) {
-      setPhoneNumber(verifiedPhoneNumber);
-      setIsVerified(true);
-    }
-  }, []);
 
   const verifyPhoneNumber = () => {
 
