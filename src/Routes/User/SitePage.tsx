@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
-import { useNavigate } from 'react-router-dom';
-import { Employee } from "../../Utility/GlobalTypes";
-import { useSiteDetails } from "../../Context/SiteDetails";
+import {useNavigate} from 'react-router-dom';
+import {Employee} from "../../Utility/GlobalTypes";
+import {useSiteDetails} from "../../Context/SiteDetails";
 
 import InputMask from "react-input-mask";
 import Time from '../../Images/Time.png';
@@ -31,19 +31,12 @@ const SitePage = () => {
 
       const cleanEmployeePhoneNumber = employee.phoneNumber.replace(/\D/g, '');
       const cleanPhoneNumber = phoneNumber.replace(/\D/g, '');
-      const isMatch = cleanEmployeePhoneNumber === cleanPhoneNumber;
 
-      if (isMatch) {
-        console.log('Matching employee.phoneNumber:', employee.phoneNumber);
-      }
-      return isMatch;
+      return cleanEmployeePhoneNumber === cleanPhoneNumber;
     })) {
       setIsVerified(true);
-      // Store verification status in local storage
       localStorage.setItem('verifiedPhoneNumber', phoneNumber);
 
-      // Print the phoneNumber stored in local storage
-      console.log('Phone number stored in local storage:', localStorage.getItem('verifiedPhoneNumber'));
     } else {
       alert("Phone number not found. Please try again.");
     }

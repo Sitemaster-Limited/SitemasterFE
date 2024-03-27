@@ -59,7 +59,6 @@ const CreateSite = () => {
       dateCreated: new Date().toLocaleDateString(),
       siteStatus: "Active"
     });
-
     setShowQR(true);
     setQrGenerationInitiated(true); // Set the flag to true
   };
@@ -148,7 +147,6 @@ const CreateSite = () => {
               placeholder="name..."/>
           </div>
 
-
           <div className="text-left mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-location">
               Where is your site located? (appx.)
@@ -165,7 +163,6 @@ const CreateSite = () => {
               defaultValue={formData.siteLocation || ''}
             />
           </div>
-
 
           <div className="text-left mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
@@ -207,7 +204,6 @@ const CreateSite = () => {
             </div>
           </div>
 
-
           <div className="flex flex-col items-center justify-center space-y-4">
             <button
               onClick={handleGenerateQR}
@@ -238,10 +234,7 @@ const CreateSite = () => {
           )}
         </div>
       </div>
-
-
     </div>
-
   );
 };
 
