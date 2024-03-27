@@ -3,7 +3,7 @@ const GetSite = async (siteId: string, clientId: string) => {
 
   try {
 
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/getSite?siteId=${encodeURIComponent(siteId)}&clientId=${encodeURIComponent(clientId)}`, {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/getSite?siteId=${encodeURIComponent(siteId)}&clientId=${clientId}`, {
       method: 'GET', // Change method to PUT
       headers: {
         'Content-Type': 'application/json',
