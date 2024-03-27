@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {Employee} from "../../Utility/GlobalTypes";
-import {useSiteDetails} from "../../Context/SiteDetails";
 
-import Blueprint from '../../Images/Blueprints.png';
+import { useNavigate } from 'react-router-dom';
+import { Employee } from "../../Utility/GlobalTypes";
+import { useSiteDetails } from "../../Context/SiteDetails";
+
+import InputMask from "react-input-mask";
 import Time from '../../Images/Time.png';
+import Blueprint from '../../Images/Blueprints.png';
 
 const SitePage = () => {
 
@@ -41,11 +43,12 @@ const SitePage = () => {
   if (!isVerified) {
     return (
       <div className="flex flex-col justify-center items-center h-screen">
-        <input
+        <InputMask
           type="tel"
           value={phoneNumber}
+          mask="(999)-999-9999"
+          placeholder="(###)-###-####"
           onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder="Enter your phone number"
           className="mb-4 p-2 border"
         />
         <button

@@ -42,7 +42,7 @@ const ClockTime = () => {
 
             axios.post('https://textbelt.com/text', {
               phone: phoneNumber,
-              message: `You have successfully clocked in at ${now}. Thank you for using Sitemaster.`,
+              message: `SITEMASTER LTD. \nYou have successfully clocked in on ${now}. Thank you for using Sitemaster.`,
               key: process.env.REACT_APP_TEXTBELT_KEY,
             }).then((response: any) => {
               console.log(response.data);
