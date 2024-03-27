@@ -4,7 +4,7 @@ import { useFormContext } from "../../Context/LocalObjectForm";
 import DisplayEmployeeList from "../../Components/DisplayEmployeeList";
 import AddSite from "../../Images/AddSite.png";
 
-import AddEmployee from "../../Services/AddEmployee";
+import PutEmployee from "../../Services/PutEmployee";
 
 const Employees = () => {
 
@@ -30,7 +30,7 @@ const Employees = () => {
         const newId = `00${formData.employees ? formData.employees.length + 1 : 1}`;
         const employeeToAdd = { ...newEmployee, employeeId: newId };
 
-        AddEmployee(formData.email || "", employeeToAdd).then(() => console.log("Employee Added"));
+        PutEmployee(formData.email || "", employeeToAdd).then(() => console.log("Employee Added"));
 
         // Update the context's formData with the new employee list
         const updatedEmployees = [...(formData.employees || []), employeeToAdd];
@@ -106,7 +106,7 @@ const Employees = () => {
                 </div>
             )}
 
-            <div className="bg-white h-[87%] rounded-[5px] overflow-auto">
+            <div className="bg-white h-full rounded-[5px] overflow-auto">
                 <DisplayEmployeeList employees={employees} searchTerm={searchTerm}/>
             </div>
         </div>

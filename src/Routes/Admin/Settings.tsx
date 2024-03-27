@@ -2,14 +2,15 @@ import React, {useState, useEffect} from "react";
 import PostAccount from "../../Services/PostAccount";
 import {useAccountData} from "../../Hooks/AccountData";
 import {useFormContext} from "../../Context/LocalObjectForm";
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 
 const Settings = () => {
 
   const {formData, updateFormData} = useFormContext();
+  const [token, setToken] = useState('');
   const apiData = useAccountData(formData);
   const auth = useAuth();
-  const [token, setToken] = useState('');
+  const user = useUser();
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -21,15 +22,16 @@ const Settings = () => {
         }
     };
 
-    fetchToken().then(() => console.log(`new token fetched: ${token}`));
+    fetchToken().then(() => console.log(`new token fetched`));
+    updateFormData({ email: user.user?.primaryEmailAddress?.emailAddress}); // Initialize formData
   }, []);
 
   return (
     <div className="flex flex-col bg-custom-bg h-screen justify-center items-center mt-16 md:mt-0 md:ml-64 p-2">
 
-      <div className="text-left mb-4">
+      <div className="text-left w-64 mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
-          Name:
+          Company name:
         </label>
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -37,13 +39,13 @@ const Settings = () => {
           type="text"
           value={formData.name || ''}
           onChange={(e) => updateFormData({name: e.target.value})}
-          placeholder="name..."/>
+          placeholder="Sitemaster ltd."/>
       </div>
 
 
-      <div className="text-left mb-4">
+      <div className="text-left w-64 mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
-          Phone number:
+          Company phone number:
         </label>
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -54,7 +56,7 @@ const Settings = () => {
           placeholder="phone number..."/>
       </div>
 
-      <div className="text-left mb-4">
+      <div className="text-left w-64 mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
           Email:
         </label>
@@ -62,15 +64,15 @@ const Settings = () => {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="site-location"
           type="text"
-          value={formData.email || ''}
+          value={user.user?.primaryEmailAddress?.emailAddress || ''}
           onChange={(e) => updateFormData({email: e.target.value})}
           placeholder="email..."/>
       </div>
 
       <div
-        className="bg-white w-36 text-custom-grey rounded-[5px] drop-shadow">
+        className="bg-white w-32 mt-2 text-custom-grey rounded-[5px] drop-shadow">
         <button className="p-2" onClick={() => PostAccount(apiData, token)}>
-          Post Account
+          Save
         </button>
       </div>
     </div>

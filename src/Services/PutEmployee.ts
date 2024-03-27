@@ -1,14 +1,14 @@
-import {FormData} from "../Utility/FormInput";
+import {Employee} from "../Utility/GlobalTypes";
 
-const AddSite = async (apiData: Partial<FormData>, adminId: string): Promise<string | null> => {
+const PutEmployee = async (adminId: string, employee: Employee): Promise<string | null> => {
   try {
 
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/updateSites/${adminId}?type=add`, {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/updateEmployees/${adminId}?type=add`, {
       method: 'PUT', // Change method to PUT
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(apiData)
+      body: JSON.stringify(employee)
     });
 
     if (!response.ok) {
@@ -24,4 +24,4 @@ const AddSite = async (apiData: Partial<FormData>, adminId: string): Promise<str
   }
 };
 
-export default AddSite;
+export default PutEmployee;

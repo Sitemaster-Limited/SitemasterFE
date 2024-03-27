@@ -4,7 +4,7 @@ import {useSiteData} from "../../Hooks/SiteData";
 import {Employee} from "../../Utility/GlobalTypes";
 
 import QRCode from "qrcode.react";
-import AddSite from "../../Services/AddSite";
+import PutSite from "../../Services/PutSite";
 import PostImages from "../../Services/PostImages";
 import GenerateSiteId from "../../Utility/GenerateSiteId";
 import EmployeeSelection from "../../Components/EmployeeSelection";
@@ -16,9 +16,10 @@ const CreateSite = () => {
   const {formData, updateFormData} = useFormContext();
   const [showQR, setShowQR] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
+  const [token, setToken] = useState('');
+
   const apiData = useSiteData(formData);
   const auth = useAuth();
-  const [token, setToken] = useState('');
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -82,10 +83,10 @@ const CreateSite = () => {
             String(formData.email),
             "Blueprints"
           );
-          console.log("Images fetched", imagesInfo.preSignedUrls);
+          console.log("Images fetched");
           apiData.siteInfo.bluePrints = imagesInfo.preSignedUrls;
-          console.log(apiData);
-          await AddSite(apiData,  String(formData.email));
+
+          await PutSite(apiData,  String(formData.email));
           console.log("Site added");
 
           updateFormData({sites: [...(formData.sites || []), apiData]});
