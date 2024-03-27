@@ -2,13 +2,15 @@ import React, {useEffect, useState} from "react";
 import {useFormContext} from "../../Context/LocalObjectForm";
 import {useSiteData} from "../../Hooks/SiteData";
 import {Employee} from "../../Utility/GlobalTypes";
+import {encryptData} from "../../Utility/Cypher";
+import {useAuth} from "@clerk/clerk-react";
 
+import AES from 'crypto-js/aes';
 import QRCode from "qrcode.react";
 import PutSite from "../../Services/PutSite";
 import PostImages from "../../Services/PostImages";
 import GenerateSiteId from "../../Utility/GenerateSiteId";
 import EmployeeSelection from "../../Components/EmployeeSelection";
-import {useAuth} from "@clerk/clerk-react";
 import GetImages from "../../Services/GetImages";
 
 const CreateSite = () => {
@@ -17,7 +19,6 @@ const CreateSite = () => {
   const [showQR, setShowQR] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [token, setToken] = useState('');
-
   const apiData = useSiteData(formData);
   const auth = useAuth();
 
@@ -31,7 +32,7 @@ const CreateSite = () => {
       }
     };
 
-    fetchToken().then(() => console.log(`new token fetched: ${token}`));
+    fetchToken().then(() => console.log(`new token fetched`));
   }, []);
 
   const [employees, setEmployees] = useState<Employee[]>(formData.employees || []);
@@ -57,6 +58,11 @@ const CreateSite = () => {
       dateCreated: new Date().toLocaleDateString(),
       siteStatus: "Active"
     });
+
+    const cypher = encryptData(formData.email as string,
+      process.env.REACT_APP_BASE64_KEY as string,
+      process.env.REACT_APP_BASE64_IV as string )
+    console.log(cypher);
 
     setShowQR(true);
     setQrGenerationInitiated(true); // Set the flag to true
@@ -209,7 +215,9 @@ const CreateSite = () => {
           </button>
           {showQR && (
             <QRCode
-              value={`${process.env.REACT_APP_FE_URL}login/site?siteId=${formData.siteId}&clientId=${formData.email}`}
+              value={`${process.env.REACT_APP_FE_URL}login/site?siteId=${formData.siteId}&clientId=${encryptData(formData.email as string,
+                process.env.REACT_APP_BASE64_KEY as string,
+                process.env.REACT_APP_BASE64_IV as string )}`}
               className="mt-4"/>
           )}
         </div>

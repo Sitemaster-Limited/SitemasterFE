@@ -20,10 +20,6 @@ const PostImages = async (
       formData.append("Images", images[i]);
     }
 
-    const entries = Array.from(formData.entries());
-    for (let [key, value] of entries) {
-      console.log(`${key}: ${value}`);
-    }
     const response = await fetch(`${process.env.REACT_APP_BE_URL}/S3`, {
       method: 'POST',
       headers: {

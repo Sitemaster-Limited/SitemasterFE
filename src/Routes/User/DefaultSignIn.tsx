@@ -34,10 +34,10 @@ const DefaultSignIn = () => {
         required // Ensure the input is required
       />
       <input
-        type="email" // Change to email type for better validation
+        type="text" // Change to email type for better validation
         value={clientId}
         onChange={(e) => setClientId(e.target.value)}
-        placeholder="Client ID (Email)"
+        placeholder="Client ID"
         className="mb-4 p-2 border"
         required // Ensure the input is required
       />

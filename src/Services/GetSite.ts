@@ -1,3 +1,4 @@
+
 const GetSite = async (siteId: string, clientId: string) => {
 
   try {
@@ -13,9 +14,7 @@ const GetSite = async (siteId: string, clientId: string) => {
       throw { status: response.status, message: `HTTP error! Status: ${response.status}` };
     }
 
-    const site = await response.json();
-    console.log(site);
-    return site;
+    return await response.json();
   } catch (error: any) {
     // use FE Logger when set up ('Error posting profile data')
     return null;
