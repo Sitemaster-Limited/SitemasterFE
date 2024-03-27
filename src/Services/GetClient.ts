@@ -1,7 +1,9 @@
-const GetEmployee = async (clientId: string): Promise<string | null> => {
+import { Account } from "../Utility/GlobalTypes";
+
+const GetClient = async (clientId: string): Promise<Account | null> => {
   try {
 
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/getEmployees?clientId=${encodeURIComponent(clientId)}`, {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/getClient?clientId=${encodeURIComponent(clientId)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -19,4 +21,4 @@ const GetEmployee = async (clientId: string): Promise<string | null> => {
   }
 };
 
-export default GetEmployee;
+export default GetClient;

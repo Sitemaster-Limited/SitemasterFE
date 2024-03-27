@@ -7,8 +7,7 @@ import Sites from './Sites';
 import CreateSite from "./CreateSite";
 import Settings from './Settings';
 import Employees from './Employees';
-import GetEmployees from "../../Services/GetEmployees";
-import GetSites from "../../Services/GetSites";
+import GetClient from "../../Services/GetClient";
 
 const AdministratorPage = () => {
 
@@ -19,15 +18,16 @@ const AdministratorPage = () => {
     const fetchData = async () => {
       if (user.isSignedIn) {
         try {
-          // Populates Employees
-          const employees = await GetEmployees(String(user.user.primaryEmailAddress?.emailAddress));
-          updateFormData({employees: employees})
 
-          // Populate Sites
-          const sites = await GetSites(String(user.user.primaryEmailAddress?.emailAddress));
-          updateFormData({sites: sites})
+          const client  = await GetClient(String(user.user.primaryEmailAddress?.emailAddress));
+          updateFormData({employees: client?.employees,
+                                  sites: client?.sites,
+                                  name: client?.administrator.name,
+                                  phoneNumber: client?.administrator.phoneNumber
+          });
+
         } catch (error) {
-          console.error("Failed to fetch employees", error);
+          console.error("Failed to fetch Client", error);
         }
       }
     };
