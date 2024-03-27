@@ -63,9 +63,6 @@ const SitePage = () => {
   // Render loading state, error message, or site name based on the state
   return (
     <div className="flex flex-col bg-custom-bg h-screen mt-20">
-      <div>
-        <p>{siteDetails?.siteInfo?.siteName}</p>
-      </div>
       <div className="grid grid-cols-2 mt-2 gap-4 px-4">
         <button onClick={() => navigate(`time`)}
                 className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
