@@ -10,5 +10,5 @@ export const encryptData = (data: string, base64Key: string, base64IV: string) =
     padding: CryptoJS.pad.Pkcs7
   });
 
-  return encrypted.toString();
+  return encodeURIComponent(encrypted.toString());
 }

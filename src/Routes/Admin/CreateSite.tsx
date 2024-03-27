@@ -20,6 +20,7 @@ const CreateSite = () => {
   const [showQR, setShowQR] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [token, setToken] = useState('');
+  const [message, setMessage] = useState('');
   const apiData = useSiteData(formData);
   const auth = useAuth();
 
@@ -91,9 +92,11 @@ const CreateSite = () => {
           console.log("Site added");
 
           updateFormData({sites: [...(formData.sites || []), apiData]});
+          setMessage("Blueprints uploaded Successfully!");
 
         } catch (error) {
           console.error("Error in processing:", error);
+          setMessage("Error uploading one or more blueprints please try again!");
         } finally {
           setQrGenerationInitiated(false);
         }
@@ -205,12 +208,12 @@ const CreateSite = () => {
           </div>
 
           <div className="flex flex-col items-center justify-center space-y-4">
+            {message && <div className="mt-2 text-sm">{message}</div>}
             <button
               onClick={handleGenerateQR}
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
               Generate QR Code
             </button>
-
           </div>
         </div>
         <div className="flex justify-center items-center">
