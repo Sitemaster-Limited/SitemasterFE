@@ -1,7 +1,7 @@
-const GetEmployee = async (clientId: string): Promise<string | null> => {
+const GetSites = async (clientId: string): Promise<string | null> => {
   try {
 
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/getEmployees?clientId=${encodeURIComponent(clientId)}`, {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/getSites?clientId=${encodeURIComponent(clientId)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -19,4 +19,4 @@ const GetEmployee = async (clientId: string): Promise<string | null> => {
   }
 };
 
-export default GetEmployee;
+export default GetSites;
