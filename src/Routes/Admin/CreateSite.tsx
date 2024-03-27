@@ -60,11 +60,6 @@ const CreateSite = () => {
       siteStatus: "Active"
     });
 
-    const cypher = encryptData(formData.email as string,
-      process.env.REACT_APP_BASE64_KEY as string,
-      process.env.REACT_APP_BASE64_IV as string )
-    console.log(cypher);
-
     setShowQR(true);
     setQrGenerationInitiated(true); // Set the flag to true
   };
@@ -230,7 +225,7 @@ const CreateSite = () => {
               </h1>
               <div className="w-[250px] h-[250px] inline-block mb-4">
                 <QRCode
-                  value={`${process.env.REACT_APP_FE_URL}login/site?siteId=${formData.siteId}&clientId=${encryptData(formData.email as string,
+                  value={`${process.env.REACT_APP_FE_URL}/login/site?siteId=${formData.siteId}&clientId=${encryptData(formData.email as string,
                     process.env.REACT_APP_BASE64_KEY as string,
                     process.env.REACT_APP_BASE64_IV as string)}`}
                   size={250}
