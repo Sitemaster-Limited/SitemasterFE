@@ -35,7 +35,7 @@ export type Account = {
         email: string;
     };
     sites: Site[];
-    employees: [];
+    employees: Employee[];
 };
 
 export type Site = {

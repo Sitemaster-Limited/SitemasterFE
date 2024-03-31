@@ -1,4 +1,4 @@
-import { Site } from './GlobalTypes'
+import { Site, Employee } from './GlobalTypes'
 
 export interface FormData {
     id: string;
@@ -16,7 +16,7 @@ export interface FormData {
     sites: Site[];
     siteAccess: [];
     // Employees List
-    employees: [];
+    employees: Employee[];
 
 }
 

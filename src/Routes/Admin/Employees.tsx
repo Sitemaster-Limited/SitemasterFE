@@ -10,6 +10,7 @@ import DisplayEmployeeList from "../../Components/DisplayEmployeeList";
 const Employees = () => {
 
   const {formData, updateFormData} = useFormContext();
+  const { v4: uuidv4 } = require('uuid');
   const [newEmployee, setNewEmployee] = useState({firstName: '', lastName: '', phoneNumber: ''});
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
@@ -28,10 +29,12 @@ const Employees = () => {
   const handleAddEmployee = (event: React.FormEvent) => {
     event.preventDefault();
     // will need to change (good for handling 999 employees id should be generated)
-    const newId = `00${formData.employees ? formData.employees.length + 1 : 1}`;
+    const newId = uuidv4();
+    console.log(newId);
     const employeeToAdd = {...newEmployee, employeeId: newId};
 
-    PutEmployee(formData.email || "", employeeToAdd).then(() => console.log("Employee Added"));
+    // Don't give an employee id to add it is already included in the object, the field is still needed for edits and deletion tho
+    PutEmployee(formData.email || "", employeeToAdd, "add", null).then(() => console.log("Employee Added"));
 
     // Update the context's formData with the new employee list
     const updatedEmployees = [...(formData.employees || []), employeeToAdd];
