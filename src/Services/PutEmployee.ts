@@ -1,6 +1,6 @@
 import {Employee} from "../Utility/GlobalTypes";
 
-const PutEmployee = async (adminId: string, employee: Employee, type: string, employeeId: string | null): Promise<string | null> => {
+const PutEmployee = async (adminId: string, employee: Employee, type: string): Promise<string | null> => {
   try {
 
     const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/updateEmployees/${adminId}?type=${type}`, {
