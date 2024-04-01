@@ -202,7 +202,7 @@ const EditSite = () => {
               {localSite.siteAccess.map((employee: Employee, index: number) => (
                 <tr key={index} className="hover:bg-gray-100">
                   <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                    {employee.firstName} {employee.lastName}
+                    {employee.firstName}
                   </td>
                   <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                     {employee.lastName}
