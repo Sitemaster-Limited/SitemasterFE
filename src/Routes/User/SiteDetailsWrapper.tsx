@@ -8,8 +8,6 @@ const SiteDetailsWrapper: React.FC = () => {
   const siteId = searchParams.get('siteId') ?? undefined;
   const clientId = searchParams.get('clientId') ?? undefined;
 
-  console.log(clientId);
-
   return (
     <SiteDetailsProvider siteId={siteId} clientId={clientId}>
       <Outlet/>
