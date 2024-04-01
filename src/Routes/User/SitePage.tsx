@@ -17,6 +17,10 @@ const SitePage = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page when the component mounts
+  }, []);
+
   const verifyPhoneNumber = () => {
 
     if (siteDetails && siteDetails.siteAccess.some((employee: Employee) => {
