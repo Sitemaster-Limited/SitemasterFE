@@ -13,13 +13,8 @@ export type Employee = {
 };
 
 export type SimpleSort = {
-    key: keyof SiteList | keyof Employee | null;
+    key: keyof Site['siteInfo'] | keyof Employee | null;
     direction: 'asc' | 'desc' | null;
-};
-
-export type SiteListProps = {
-    sites: SiteList[];
-    searchTerm?: string;
 };
 
 export type EmployeeListProps = {
@@ -46,6 +41,7 @@ export type Site = {
         siteLocation: string;
         siteStatus: 'Active' | 'Saved' | 'Inactive' | '';
         bluePrints: [];
+        qrCode: [];
     };
     siteAccess: [];
 }

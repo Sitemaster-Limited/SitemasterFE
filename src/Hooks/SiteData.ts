@@ -13,6 +13,7 @@ export const useSiteData = (formData: Partial<FormData>) => {
             siteLocation: String(formData.siteLocation || "default_site_location"),
             siteStatus: String(formData.siteStatus || "Active"),
             bluePrints: formData.siteMedia || [],
+            qrCode: []
         },
         siteAccess: formData.siteAccess || [],
     }), [formData]);
