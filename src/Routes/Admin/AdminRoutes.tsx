@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { SignedIn, SignedOut, SignInButton, useUser  } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignIn, useUser  } from "@clerk/clerk-react";
 import { useFormContext } from "../../Context/LocalObjectForm";
 
 import Sites from './Sites';
@@ -39,8 +39,12 @@ const AdministratorPage = () => {
     <>
       <SignedOut>
         <div className="flex flex-col items-center justify-center bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2">
-          <p>Please sign in to access the Administrator Dashboard</p>
-          <SignInButton redirectUrl="admin/settings" /> {/* Customize redirectUrl as needed */}
+          <SignIn redirectUrl="admin/settings"
+                  appearance={{
+                    variables: {
+                      colorPrimary: "#EE172E"
+                    },
+                  }}/> {/* Customize redirectUrl as needed */}
         </div>
       </SignedOut>
       <SignedIn>

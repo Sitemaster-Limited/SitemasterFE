@@ -16,15 +16,29 @@ const Navbar = () => {
       <div
         className="bg-custom-black h-full rounded-[5px] flex flex-col justify-between"> {/* Adjusted for flex layout */}
         <div>
-          <Link to="/admin" id="nav-title" className="hidden md:block">
-            <img src={Logo} alt="SITEMASTER" className="pt-1 w-full"/>
-          </Link>
-          <div className="p-5 md:p-2 md:w-64 flex justify-end items-center">
-            <button className="text-white md:hidden" onClick={() => setIsOpen(!isOpen)}>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7"/>
-              </svg>
-            </button>
+          <div className={"flex flex-row justify-between md:hidden"}>
+            <Link to="/admin" id="nav-title">
+              <img src={Logo} alt="SITEMASTER" className="pt-1 w-full"/>
+            </Link>
+            <div className="p-5 md:p-2 md:w-64 flex justify-end items-center">
+              <button className="text-white md:hidden" onClick={() => setIsOpen(!isOpen)}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className={"hidden md:block"}>
+            <Link to="/admin" id="nav-title">
+              <img src={Logo} alt="SITEMASTER" className="pt-1 w-full"/>
+            </Link>
+            <div className="p-5 md:p-2 md:w-64 flex justify-end items-center">
+              <button className="text-white md:hidden" onClick={() => setIsOpen(!isOpen)}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7"/>
+                </svg>
+              </button>
+            </div>
           </div>
           {/* Conditionally render links based on isOpen state */}
           <ul className={`${isOpen ? 'block bg-custom-red' : 'hidden'} md:block`}>
@@ -58,10 +72,22 @@ const Navbar = () => {
                 </Link>
               </div>
             </li>
+            <li className="py-2 hover:bg-custom-red cursor-pointer">
+              <div onClick={() => setIsOpen(false)}>
+                <SignOutButton>
+                  <Link className="md:ml-4 block text-white"
+                        to="/">
+                    <div className="flex items-center justify-center md:justify-start">
+                      Sign out
+                    </div>
+                  </Link>
+                </SignOutButton>
+              </div>
+            </li>
           </ul>
         </div>
         {/* SignOutButton placed at the bottom */}
-        <div className="p-4">
+        <div className="p-4 hidden sm:block">
           <SignOutButton>
               <Link className="text-white py-2 px-4 w-full"
                            to="/">
