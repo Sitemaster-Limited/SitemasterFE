@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from "../../Context/LocalObjectForm";
-import {SiteList} from '../../Utility/GlobalTypes';
 
 import DisplaySiteList from '../../Components/DisplaySiteList';
 import AddSite from '../../Images/AddSite.png';
@@ -11,21 +10,6 @@ const Sites = () => {
 
     const navigate = useNavigate();
     const { formData } = useFormContext();
-    const [sites, setSites] = useState<SiteList[]>([]);
-
-    useEffect(() => {
-        if (formData.sites) {
-            const transformedSites: SiteList[] = formData.sites.map((site): SiteList => {
-                return {
-                    id: site.siteInfo.siteId,
-                    name: site.siteInfo.siteName,
-                    date: site.siteInfo.dateCreated,
-                    status: site.siteInfo.siteStatus,
-                };
-            });
-            setSites(transformedSites);
-        }
-    }, [formData.sites]);
 
     // State to hold the search term
     const [searchTerm, setSearchTerm] = useState("");
@@ -85,7 +69,7 @@ const Sites = () => {
             </div>
 
             <div className="bg-white h-full rounded-[5px] overflow-auto">
-                <DisplaySiteList sites={sites} searchTerm={searchTerm}/>
+                <DisplaySiteList searchTerm={searchTerm}/>
             </div>
 
         </div>

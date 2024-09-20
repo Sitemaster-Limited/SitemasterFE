@@ -60,8 +60,8 @@ const ActionItem: React.FC<ActionItemProps> = ({employee}) => {
         updatedEmployees[employeeIndex] = updatedEmployee;
 
         updateFormData({...formData, employees: updatedEmployees});
-        // Uncomment the next line once the issue is resolved
-        // PutEmployee(formData.email || "", updatedEmployees, "update", updatedEmployee.employeeId).then(() => console.log("Employee Updated"));
+        PutEmployee(formData.email || "", updatedEmployee, "update").then(() => console.log("Employee Updated"));
+        setShowModal(false);
 
       } else {
         alert("Error updating employee");
@@ -85,10 +85,8 @@ const ActionItem: React.FC<ActionItemProps> = ({employee}) => {
       // Check if the length of the arrays is different to confirm deletion
       if (updatedEmployees.length !== formData.employees.length) {
         updateFormData({...formData, employees: updatedEmployees});
-        // Uncomment the next line to integrate with your backend or external system
-        // PutEmployee(formData.email || "", updatedEmployees, "delete", employeeIdToDelete).then(() => console.log("Employee Deleted"));
+        PutEmployee(formData.email || "", updatedEmployee, "remove").then(() => console.log("Employee Deleted"));
 
-        console.log(`Employee with deleted.`);
       } else {
         // This means no matching employee was found to delete
         console.log("Employee not found.");

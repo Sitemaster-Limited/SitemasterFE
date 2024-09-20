@@ -40,13 +40,17 @@ const ClockTime = () => {
           if (phoneNumber) {
             phoneNumber = phoneNumber.replace(/\D/g, '');
 
-            axios.post('https://textbelt.com/text', {
-              phone: phoneNumber,
-              message: `SITEMASTER LTD. \nYou have successfully clocked in on ${now}. Thank you for using Sitemaster.`,
-              key: process.env.REACT_APP_TEXTBELT_KEY,
-            }).then((response: any) => {
-              console.log(response.data);
-            })
+            if(!/^1+$/.test(phoneNumber)){ // Note general Access
+              axios.post('https://textbelt.com/text', {
+                phone: phoneNumber,
+                message: `SITEMASTER LTD. \nYou have successfully clocked in on ${now}. Thank you for using Sitemaster.`,
+                key: process.env.REACT_APP_TEXTBELT_KEY,
+              }).then((response: any) => {
+                console.log(response.data);
+              })
+            } else {
+              console.log('General Access');
+            }
 
           }
         },

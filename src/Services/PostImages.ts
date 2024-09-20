@@ -2,22 +2,33 @@
 const PostImages = async (
   siteId: string,
   client: string,
-  images: File[] | null,
+  blueprints: File[] | null,
+  qrCode: File[] | null,
   token: string,
-  type: string,
+  type: string, // redundant for POST but needed for GET
 ): Promise<string | null> => {
   try {
 
-    if (!images || images.length === 0) {
-      return null; // No images to upload, return early
+    if ((!blueprints || blueprints.length === 0) && !qrCode) {
+      console.log('No QR Code or blueprints to upload.');
+      return null; // Nothing to upload, return early
     }
 
     const formData = new FormData();
     formData.append("SiteId", siteId);
     formData.append("Type", type);
     formData.append("Client", client);
-    for (let i = 0; i < images.length; i++) {
-      formData.append("Images", images[i]);
+
+    if (blueprints && blueprints.length > 0) {
+      blueprints.forEach(blueprint => {
+        formData.append("Blueprints", blueprint);
+      });
+    }
+
+    if (qrCode && qrCode.length > 0) {
+      qrCode.forEach(qrCode => {
+        formData.append("QRCode", qrCode);
+      });
     }
 
     const response = await fetch(`${process.env.REACT_APP_BE_URL}/S3`, {

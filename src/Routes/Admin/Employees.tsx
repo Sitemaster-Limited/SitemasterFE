@@ -30,11 +30,10 @@ const Employees = () => {
     event.preventDefault();
     // will need to change (good for handling 999 employees id should be generated)
     const newId = uuidv4();
-    console.log(newId);
     const employeeToAdd = {...newEmployee, employeeId: newId};
 
     // Don't give an employee id to add it is already included in the object, the field is still needed for edits and deletion tho
-    PutEmployee(formData.email || "", employeeToAdd, "add", null).then(() => console.log("Employee Added"));
+    PutEmployee(formData.email || "", employeeToAdd, "add").then(() => console.log("Employee Added"));
 
     // Update the context's formData with the new employee list
     const updatedEmployees = [...(formData.employees || []), employeeToAdd];

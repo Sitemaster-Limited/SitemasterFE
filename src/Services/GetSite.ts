@@ -3,7 +3,6 @@ const GetSite = async (siteId: string, clientId: string) => {
 
   try {
 
-    console.log("Site Id from Get: " + clientId);
     // Do not encode clientId, it is already encoded
     const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/getSite?siteId=${encodeURIComponent(siteId)}&clientId=${encodeURIComponent(clientId)}`, {
       method: 'GET', // Change method to PUT

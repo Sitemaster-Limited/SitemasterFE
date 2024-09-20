@@ -5,6 +5,7 @@ import { useFormContext } from "../../Context/LocalObjectForm";
 
 import Sites from './Sites';
 import CreateSite from "./CreateSite";
+import EditSite from "./EditSite";
 import Settings from './Settings';
 import Employees from './Employees';
 import GetClient from "../../Services/GetClient";
@@ -52,6 +53,7 @@ const AdministratorPage = () => {
           <Route path="/" element={<Navigate replace to="sites" />} />
           <Route path="sites" element={<Sites />} />
           <Route path="sites/create" element={<CreateSite />} />
+          <Route path="sites/edit" element={<EditSite />} />
           <Route path="employees" element={<Employees />} />
           <Route path="settings" element={<Settings />} />
         </Routes>
