@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useLocation } from "react-router-dom";
 import { Attendance } from "../../Utility/GlobalTypes";
 
@@ -7,9 +7,15 @@ import DisplayAttendanceList from "../../Components/DisplayAttendanceList";
 const SiteAttendance = () => {
 
   const location = useLocation();
-  const attendance: Attendance[] = useState(location.state?.site.siteAttendance);
+  const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  useEffect(() => {
+    // Ensure attendance is only set once location is ready and siteAttendance exists
+    if (location.state?.site?.siteAttendance) {
+      setAttendance(location.state.site.siteAttendance);
+    }
+  }, [location.state]);
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -21,10 +27,10 @@ const SiteAttendance = () => {
         <h1 className="text-left text-[34px]">Site Attendance</h1>
       </div>
       <div className="h-[42px] mb-2 flex">
-        <div className="flex-1 ml-2 max-w-96">
+        <div className="flex-1 max-w-96">
           <input
             type="text"
-            placeholder="Search Employees..."
+            placeholder="Search Attendances..."
             value={searchTerm}
             onChange={handleSearchChange}
             className="w-full p-2 h-full rounded-[5px] drop-shadow"

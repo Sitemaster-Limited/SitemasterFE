@@ -151,7 +151,7 @@ const ClockTime = () => {
           }
         }
       );
-      console.log('SMS sent successfully:', response.data);
+      console.log('SMS sent successfully');
     } catch (error: any) {
       console.error('Error sending SMS:', error.response?.data || error.message);
     }
@@ -273,7 +273,7 @@ const ClockTime = () => {
     const data = new URLSearchParams();
     data.append('To', `+1${phoneNumber}`);
     data.append('From', process.env.REACT_APP_TWILIO_PHONE_NUMBER!);
-    data.append('Body', `SITEMASTER LTD. \nYou have successfully clocked out on ${now}. Total hours worked: ${totalTime}. Thank you for using Sitemaster.`);
+    data.append('Body', `SITEMASTER LTD. \nYou have successfully clocked out on ${now}. Thank you for using Sitemaster.`);
 
     try {
       const response = await axios.post(
@@ -289,7 +289,7 @@ const ClockTime = () => {
           }
         }
       );
-      console.log('SMS sent successfully:', response.data);
+      console.log('SMS sent successfully');
     } catch (error: any) {
       console.error('Error sending SMS:', error.response?.data || error.message);
     }

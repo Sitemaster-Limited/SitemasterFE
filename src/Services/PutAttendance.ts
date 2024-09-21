@@ -2,8 +2,7 @@ import {Attendance} from "../Utility/GlobalTypes";
 
 const PutAttendance = async (clientId: string, siteId: string, attendance: Attendance): Promise<string | null> => {
   try {
-    console.log(clientId)
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/updateAttendance/${encodeURIComponent(clientId)}?siteId=${siteId}`, {
+      const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/updateAttendance/${encodeURIComponent(clientId)}?siteId=${siteId}`, {
       method: 'PUT', // Change method to PUT
       headers: {
         'Content-Type': 'application/json',

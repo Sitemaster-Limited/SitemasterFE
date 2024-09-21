@@ -87,7 +87,7 @@ const Navbar = () => {
           </ul>
         </div>
         {/* SignOutButton placed at the bottom */}
-        <div className="p-4 hidden sm:block">
+        <div className="p-4 hidden md:block">
           <SignOutButton>
               <Link className="text-white py-2 px-4 w-full"
                            to="/">
