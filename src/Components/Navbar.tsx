@@ -72,7 +72,7 @@ const Navbar = () => {
                 </Link>
               </div>
             </li>
-            <li className="py-2 hover:bg-custom-red cursor-pointer">
+            <li className="py-2 hover:bg-custom-red cursor-pointer md:hidden">
               <div onClick={() => setIsOpen(false)}>
                 <SignOutButton>
                   <Link className="md:ml-4 block text-white"

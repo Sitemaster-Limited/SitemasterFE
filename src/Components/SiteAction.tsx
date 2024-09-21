@@ -33,6 +33,10 @@ const ActionItem: React.FC<ActionItemProps> = ({site}) => {
     navigate('edit', {state: {site}});
   };
 
+  const handleAttendance = () => {
+    navigate('attendance', {state: {site}});
+  };
+
   const handleArchive = () => {
     // Implement archive logic here
     alert(`Archiving property ${site.siteInfo.siteId}`);
@@ -54,6 +58,11 @@ const ActionItem: React.FC<ActionItemProps> = ({site}) => {
             <li>
               <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 block w-full text-left"
                       onClick={handleArchive}>Archive
+              </button>
+            </li>
+            <li>
+              <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 block w-full text-left"
+                      onClick={handleAttendance}>Attendance
               </button>
             </li>
           </ul>

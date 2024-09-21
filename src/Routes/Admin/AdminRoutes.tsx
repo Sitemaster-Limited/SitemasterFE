@@ -9,6 +9,7 @@ import EditSite from "./EditSite";
 import Settings from './Settings';
 import Employees from './Employees';
 import GetClient from "../../Services/GetClient";
+import SiteAttendance from "./SiteAttendance";
 
 const AdministratorPage = () => {
 
@@ -54,6 +55,7 @@ const AdministratorPage = () => {
           <Route path="sites" element={<Sites />} />
           <Route path="sites/create" element={<CreateSite />} />
           <Route path="sites/edit" element={<EditSite />} />
+          <Route path="sites/attendance" element={<SiteAttendance />} />
           <Route path="employees" element={<Employees />} />
           <Route path="settings" element={<Settings />} />
         </Routes>

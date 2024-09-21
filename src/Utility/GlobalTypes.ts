@@ -33,6 +33,17 @@ export type Account = {
     employees: Employee[];
 };
 
+export type Attendance = {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    type: string;
+    time: string;
+    latitude: string;
+    longitude: string;
+    accuracy: string;
+};
+
 export type Site = {
     siteInfo: {
         siteId: string;
@@ -44,7 +55,14 @@ export type Site = {
         qrCode: [];
     };
     siteAccess: [];
+    siteAttendance: Attendance[];
 }
+
+export let globalClientId: string | undefined = undefined;
+
+export const setGlobalClientId = (id: string | undefined) => {
+    globalClientId = id;
+};
 
 
 

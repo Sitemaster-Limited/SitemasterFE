@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Site } from "../Utility/GlobalTypes";
 import GetSite from "../Services/GetSite";
+import { setGlobalClientId } from "../Utility/GlobalTypes";
 
 interface SiteDetailsContextValue {
   siteDetails: Site | null;
@@ -24,6 +25,8 @@ export const SiteDetailsProvider: React.FC<SiteDetailsProviderProps> = ({ childr
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    setGlobalClientId(clientId);
     const fetchSiteDetails = async () => {
       // Early exit if siteId or clientId are not provided
       if (!siteId || !clientId) {

@@ -2,68 +2,146 @@ import React, {useState, useEffect} from 'react';
 
 import Clock from '../../Images/Clock.png'
 import axios from "axios";
+import PutAttendance from "../../Services/PutAttendance";
+import {useSiteDetails} from "../../Context/SiteDetails";
+import { globalClientId } from "../../Utility/GlobalTypes";
 
-interface LocationState {
-  latitude: number;
-  longitude: number;
-  accuracy: number;
+interface LocationData {
+  latitude: string;
+  longitude: string;
+  accuracy: string;
 }
 
 const ClockTime = () => {
 
-  const [location, setLocation] = useState<LocationState | null>(null);
   const [clockedIn, setClockedIn] = useState(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [totalTime, setTotalTime] = useState<string | null>(null);
-  const handleClockIn = () => {
+  const [clientId, setClientId] = useState<string>("");
+  const { siteDetails } = useSiteDetails()
+
+  useEffect(() => {
+    if (globalClientId) {
+      setClientId(globalClientId);
+    }
+  }, []);
+
+  const handleClockIn = async () => {
     const options = {
-      enableHighAccuracy: true, // This requests the highest accuracy from the device's GPS sensor
-      timeout: 5000, // The maximum time (in milliseconds) the device is allowed to take in order to return a position
-      maximumAge: 0 // Defines the maximum age in milliseconds of a possible cached position that is acceptable to return
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
     };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy // You can also capture the accuracy level of the coordinates
-          });
+    const now = new Date();
+    setStartTime(now);
+    setClockedIn(true);
 
-          const now = new Date();
-          setStartTime(now);
-          setClockedIn(true);
+    let phoneNumber = localStorage.getItem('verifiedPhoneNumber');
 
-          let phoneNumber = localStorage.getItem('verifiedPhoneNumber');
-          if (phoneNumber) {
-            phoneNumber = phoneNumber.replace(/\D/g, '');
-
-            if(!/^1+$/.test(phoneNumber)){ // Note general Access
-              axios.post('https://textbelt.com/text', {
-                phone: phoneNumber,
-                message: `SITEMASTER LTD. \nYou have successfully clocked in on ${now}. Thank you for using Sitemaster.`,
-                key: process.env.REACT_APP_TEXTBELT_KEY,
-              }).then((response: any) => {
-                console.log(response.data);
-              })
-            } else {
-              console.log('General Access');
-            }
-
-          }
-        },
-        (error) => {
-          console.error("Error Code = " + error.code + " - " + error.message);
-        },
-        options
-      );
-    } else {
-      alert("Geolocation is not supported by this browser.");
+    // Check if phoneNumber exists
+    if (!phoneNumber) {
+      alert('Phone number not found. Please verify your phone number before clocking in.');
+      return;
     }
 
+    // Clean up the phone number by removing any non-numeric characters
+    phoneNumber = phoneNumber.replace(/\D/g, '');
+
+    // Handle clock in process
+    if (!(/^1+$/.test(phoneNumber))) {
+      // Try to get the user's location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            // Send attendance and SMS with position data
+            await handleAttendanceAndSMS(phoneNumber!, now, {
+              latitude: String(position.coords.latitude),
+              longitude: String(position.coords.longitude),
+              accuracy: String(position.coords.accuracy),
+            });
+          },
+          async (error) => {
+            console.error('Geolocation error:', error);
+            // Send attendance and SMS with no geolocation data
+            await handleAttendanceAndSMS(phoneNumber!, now, {
+              latitude: '',
+              longitude: '',
+              accuracy: '',
+            });
+          },
+          options
+        );
+      } else {
+        // Geolocation not supported
+        await handleAttendanceAndSMS(phoneNumber, now, {
+          latitude: '',
+          longitude: '',
+          accuracy: '',
+        });
+      }
+    } else {
+      console.log('General Access - No SMS sent.');
+    }
   };
+
+// Function to handle both attendance and SMS
+  const handleAttendanceAndSMS = async (phoneNumber: string, now: Date, positionData: LocationData) => {
+    const attendance = {
+      firstName: 'ethan',
+      lastName: 'fifle',
+      phoneNumber: phoneNumber,
+      type: 'clockIn',
+      time: String(now),
+      latitude: positionData.latitude,
+      longitude: positionData.longitude,
+      accuracy: positionData.accuracy,
+    };
+
+    // Send the attendance data to the server
+    try {
+      await PutAttendance(clientId, siteDetails?.siteInfo.siteId!, attendance);
+    } catch (error) {
+      console.error('Error updating attendance:', error);
+      return;
+    }
+
+    // Send SMS using Twilio API
+    try {
+      await sendSMS(phoneNumber, now);
+    } catch (error) {
+      console.error('Error sending SMS:', error);
+    }
+  };
+
+// Function to send SMS
+  const sendSMS = async (phoneNumber: string, now: Date) => {
+    const data = new URLSearchParams();
+    data.append('To', `+1${phoneNumber}`); // Add the phone number
+    data.append('From', process.env.REACT_APP_TWILIO_PHONE_NUMBER!); // Your Twilio phone number
+    data.append('Body', `SITEMASTER LTD. \nYou have successfully clocked in on ${now}. Thank you for using Sitemaster.`); // Message body
+
+    try {
+      const response = await axios.post(
+        `https://api.twilio.com/2010-04-01/Accounts/${process.env.REACT_APP_TWILIO_ACCOUNT_SID!}/Messages.json`,
+        data,
+        {
+          auth: {
+            username: process.env.REACT_APP_TWILIO_ACCOUNT_SID!, // Twilio Account SID
+            password: process.env.REACT_APP_TWILIO_AUTH_TOKEN! // Twilio Auth Token
+          },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+      );
+      console.log('SMS sent successfully:', response.data);
+    } catch (error: any) {
+      console.error('Error sending SMS:', error.response?.data || error.message);
+    }
+  };
+
 
   useEffect(() => {
     // Check and set clock-in status from localStorage on component mount
@@ -93,8 +171,9 @@ const ClockTime = () => {
     }
   }, [clockedIn, startTime]);
 
-  const handleClockOut = () => {
+  const handleClockOut = async () => {
     setClockedIn(false);
+
     if (startTime) {
       const now = new Date();
       const elapsed = now.getTime() - new Date(startTime).getTime();
@@ -105,12 +184,122 @@ const ClockTime = () => {
       const seconds = Math.floor((elapsed / 1000) % 60);
 
       setTotalTime(`${hours}h ${minutes}m ${seconds}s`);
-      setClockedIn(false);
       setStartTime(null);
+
+      let phoneNumber = localStorage.getItem('verifiedPhoneNumber');
+      if (phoneNumber) {
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+
+        if (!(/^1+$/.test(phoneNumber))) {
+          // Get the user's geolocation on clock-out
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                const locationData = {
+                  latitude: String(position.coords.latitude),
+                  longitude: String(position.coords.longitude),
+                  accuracy: String(position.coords.accuracy),
+                };
+
+                // Send the clock-out SMS
+                await sendClockOutSMS(phoneNumber!, now);
+
+                // Call PutAttendance with "clockOut" and geolocation data
+                await submitAttendance(phoneNumber!, now, locationData);
+
+              },
+              async (error) => {
+                console.error('Geolocation error:', error);
+                // If geolocation fails, proceed without location data
+                const locationData = {
+                  latitude: '',
+                  longitude: '',
+                  accuracy: '',
+                };
+
+                // Send the clock-out SMS
+                await sendClockOutSMS(phoneNumber!, now);
+
+                // Call PutAttendance without geolocation data
+                await submitAttendance(phoneNumber!, now, locationData);
+              },
+              {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0,
+              }
+            );
+          } else {
+            // If geolocation is not supported, proceed without location data
+            const locationData = {
+              latitude: '',
+              longitude: '',
+              accuracy: '',
+            };
+
+            // Send the clock-out SMS
+            await sendClockOutSMS(phoneNumber, now);
+
+            // Call PutAttendance without geolocation data
+            await submitAttendance(phoneNumber, now, locationData);
+          }
+        } else {
+          console.log('General Access - No SMS sent.');
+        }
+      }
+
       localStorage.removeItem('clockedIn');
       localStorage.removeItem('startTime');
     }
   };
+
+// Helper function to send clock-out SMS
+  const sendClockOutSMS = async (phoneNumber: string, now: Date) => {
+    const data = new URLSearchParams();
+    data.append('To', `+1${phoneNumber}`);
+    data.append('From', process.env.REACT_APP_TWILIO_PHONE_NUMBER!);
+    data.append('Body', `SITEMASTER LTD. \nYou have successfully clocked out on ${now}. Total hours worked: ${totalTime}. Thank you for using Sitemaster.`);
+
+    try {
+      const response = await axios.post(
+        `https://api.twilio.com/2010-04-01/Accounts/${process.env.REACT_APP_TWILIO_ACCOUNT_SID!}/Messages.json`,
+        data,
+        {
+          auth: {
+            username: process.env.REACT_APP_TWILIO_ACCOUNT_SID!,
+            password: process.env.REACT_APP_TWILIO_AUTH_TOKEN!
+          },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+      );
+      console.log('SMS sent successfully:', response.data);
+    } catch (error: any) {
+      console.error('Error sending SMS:', error.response?.data || error.message);
+    }
+  };
+
+// Helper function to submit attendance
+  const submitAttendance = async (phoneNumber: string, now: Date, locationData: LocationData) => {
+    const attendance = {
+      firstName: 'ethan',
+      lastName: 'fifle',
+      phoneNumber: phoneNumber,
+      type: 'clockOut', // Set the type as "clockOut"
+      time: String(now),
+      latitude: locationData.latitude,
+      longitude: locationData.longitude,
+      accuracy: locationData.accuracy,
+    };
+
+    try {
+      await PutAttendance(clientId, siteDetails?.siteInfo.siteId!, attendance);
+    } catch (error) {
+      console.error('Error updating attendance:', error);
+    }
+  };
+
 
   const renderTimer = () => {
     if (!startTime) return '00:00:00';
