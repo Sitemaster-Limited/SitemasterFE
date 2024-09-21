@@ -1,12 +1,9 @@
 import React, {useEffect, useState,} from "react";
-import {Employee, Site} from "../../Utility/GlobalTypes";
+import {Employee} from "../../Utility/GlobalTypes";
 import {useFormContext} from "../../Context/LocalObjectForm";
 import {useSiteData} from "../../Hooks/SiteData";
 import {useLocation} from 'react-router-dom';
 import {useAuth} from "@clerk/clerk-react";
-
-import PutSite from "../../Services/PutSite";
-import PostImages from "../../Services/PostImages";
 
 import EmployeeSelection from "../../Components/EmployeeSelection";
 

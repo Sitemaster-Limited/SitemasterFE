@@ -4,7 +4,7 @@ import Clock from '../../Images/Clock.png'
 import axios from "axios";
 import PutAttendance from "../../Services/PutAttendance";
 import {useSiteDetails} from "../../Context/SiteDetails";
-import { globalClientId } from "../../Utility/GlobalTypes";
+import {Employee, globalClientId} from "../../Utility/GlobalTypes";
 
 interface LocationData {
   latitude: string;
@@ -88,9 +88,24 @@ const ClockTime = () => {
 
 // Function to handle both attendance and SMS
   const handleAttendanceAndSMS = async (phoneNumber: string, now: Date, positionData: LocationData) => {
+
+    let verifiedEmployee: Employee | undefined;
+
+    if (siteDetails && siteDetails.siteAccess) {
+      verifiedEmployee = siteDetails.siteAccess.find((employee: Employee) => {
+        const cleanEmployeePhoneNumber = employee.phoneNumber.replace(/\D/g, '');
+        return cleanEmployeePhoneNumber === phoneNumber;
+      });
+    }
+
+    // Ensure verifiedEmployee is found, otherwise throw an error
+    if (!verifiedEmployee) {
+      throw new Error('Employee not found');
+    }
+
     const attendance = {
-      firstName: 'ethan',
-      lastName: 'fifle',
+      firstName: verifiedEmployee.firstName,
+      lastName: verifiedEmployee.lastName,
       phoneNumber: phoneNumber,
       type: 'clockIn',
       time: String(now),
@@ -282,9 +297,23 @@ const ClockTime = () => {
 
 // Helper function to submit attendance
   const submitAttendance = async (phoneNumber: string, now: Date, locationData: LocationData) => {
+
+    let verifiedEmployee: Employee | undefined;
+
+    if (siteDetails && siteDetails.siteAccess) {
+      verifiedEmployee = siteDetails.siteAccess.find((employee: Employee) => {
+        const cleanEmployeePhoneNumber = employee.phoneNumber.replace(/\D/g, '');
+        return cleanEmployeePhoneNumber === phoneNumber;
+      });
+    }
+
+    // Ensure verifiedEmployee is found, otherwise throw an error
+    if (!verifiedEmployee) {
+      throw new Error('Employee not found');
+    }
     const attendance = {
-      firstName: 'ethan',
-      lastName: 'fifle',
+      firstName: verifiedEmployee.firstName,
+      lastName: verifiedEmployee.lastName,
       phoneNumber: phoneNumber,
       type: 'clockOut', // Set the type as "clockOut"
       time: String(now),

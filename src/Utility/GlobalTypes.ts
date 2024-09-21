@@ -13,12 +13,17 @@ export type Employee = {
 };
 
 export type SimpleSort = {
-    key: keyof Site['siteInfo'] | keyof Employee | null;
+    key: keyof Site['siteInfo'] | keyof Employee | keyof Attendance | null;
     direction: 'asc' | 'desc' | null;
 };
 
 export type EmployeeListProps = {
     employees: Employee[];
+    searchTerm?: string;
+};
+
+export type AttendanceListProps = {
+    attendances: Attendance[];
     searchTerm?: string;
 };
 

@@ -1,53 +1,37 @@
-import React, {useEffect, useState,} from "react";
-import {Employee, Site} from "../../Utility/GlobalTypes";
-import {useFormContext} from "../../Context/LocalObjectForm";
-import {useSiteData} from "../../Hooks/SiteData";
-import {useLocation} from 'react-router-dom';
-import {useAuth} from "@clerk/clerk-react";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Attendance } from "../../Utility/GlobalTypes";
 
-import PutSite from "../../Services/PutSite";
-import PostImages from "../../Services/PostImages";
-
-import EmployeeSelection from "../../Components/EmployeeSelection";
-
-import Autocomplete from 'react-google-autocomplete';
+import DisplayAttendanceList from "../../Components/DisplayAttendanceList";
 
 const SiteAttendance = () => {
 
-  const auth = useAuth();
   const location = useLocation();
-  const [localSite, setLocalSite] = useState(location.state?.site);
+  const attendance: Attendance[] = useState(location.state?.site.siteAttendance);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const {formData, updateFormData} = useFormContext();
-  const [token, setToken] = useState('');
-  const [files, setFiles] = useState<File[]>([]);
-  const [message, setMessage] = useState('');
-  const apiData = useSiteData(formData);
-
-  useEffect(() => {
-    const fetchToken = async () => {
-      const jwt = await auth.getToken({template: 'SitemasterBE'});
-      if (jwt !== null) {
-        setToken(jwt);
-      } else {
-        setToken(''); // No valid token
-      }
-    };
-
-    fetchToken().then(() => console.log(`new token fetched`));
-  }, []);
-
-  const [employees, setEmployees] = useState<Employee[]>(formData.employees || []);
-  useEffect(() => {
-    if (formData.employees) {
-      setEmployees(formData.employees);
-    }
-  }, [formData.employees]);
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
 
   return (
-    <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-4">
-      Hello
+    <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2 relative">
+      <div className="h-[6%] rounded-[5px] mb-3">
+        <h1 className="text-left text-[34px]">Site Attendance</h1>
+      </div>
+      <div className="h-[42px] mb-2 flex">
+        <div className="flex-1 ml-2 max-w-96">
+          <input
+            type="text"
+            placeholder="Search Employees..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="w-full p-2 h-full rounded-[5px] drop-shadow"
+          />
+        </div>
+      </div>
+      <DisplayAttendanceList attendances={attendance} searchTerm={searchTerm} />
     </div>
   );
 };
