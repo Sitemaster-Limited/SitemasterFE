@@ -345,7 +345,7 @@ const ClockTime = () => {
 
   return (
     <>
-      <div className="bg-custom-bg flex flex-col h-screen mt-20">
+      <div className="bg-custom-bg flex flex-col h-full">
         <div className="mt-2 px-4">
           {!clockedIn && (
             <button onClick={handleClockIn}

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import {useNavigate} from 'react-router-dom';
+import { ClipboardList } from 'lucide-react';
 import {Employee} from "../../Utility/GlobalTypes";
 import {useSiteDetails} from "../../Context/SiteDetails";
 
@@ -65,7 +66,7 @@ const SitePage = () => {
   }
   // Render loading state, error message, or site name based on the state
   return (
-    <div className="flex flex-col bg-custom-bg h-screen mt-20">
+    <div className="flex flex-col h-full">
       <div className="grid grid-cols-2 mt-2 gap-4 px-4">
         <button onClick={() => navigate(`time`)}
                 className="bg-white w-full aspect-square rounded-lg shadow-md flex items-center justify-center p-4">
@@ -83,6 +84,12 @@ const SitePage = () => {
               <img src={Blueprint} alt="BlUEPRINTS" className="pt-1 rounded-[5px] w-full"/>
             </div>
           </div>
+        </button>
+
+        <button onClick={() => navigate(`progress-report`)}
+                className="bg-white w-full col-span-2 rounded-lg shadow-md flex flex-row items-start p-4">
+          <ClipboardList />
+          <p className="ml-1 text-lg font-semibold font-sans">Progress Report</p>
         </button>
       </div>
     </div>

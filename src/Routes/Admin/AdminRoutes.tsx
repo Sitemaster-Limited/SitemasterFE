@@ -40,13 +40,13 @@ const AdministratorPage = () => {
   return (
     <>
       <SignedOut>
-        <div className="flex flex-col items-center justify-center bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2">
+        <div className="flex justify-center items-center h-[80vh]">
           <SignIn redirectUrl="admin/settings"
                   appearance={{
                     variables: {
                       colorPrimary: "#EE172E"
                     },
-                  }}/> {/* Customize redirectUrl as needed */}
+                  }}/>
         </div>
       </SignedOut>
       <SignedIn>

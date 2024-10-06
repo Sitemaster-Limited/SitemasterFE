@@ -11,7 +11,7 @@ const SiteHeader = () => {
   const isSubpathOfSite = location.pathname.startsWith("/login/site/");
 
   return (
-    <div className="bg-white fixed top-0 py-2 pl-2 pr-2 w-full z-20 flex items-center">
+    <div className="bg-none sticky top-0 py-2 pl-2 pr-2 w-full z-50 flex items-center">
       {isSubpathOfSite && (
         <div className="absolute ml-3 left-4 cursor-pointer" onClick={handleBackClick}>
           <img src={BackArrow} alt="Back" className="h-5"/>
