@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -45,6 +45,17 @@ const ProgressReportForm = () => {
         })
       )
       .optional(),
+    images:z.
+      array(
+        z.instanceof(File)
+        .refine(file => file.type === 'image/jpeg' || file.type === 'image/png', {
+          message: "Only JPEG or PNG images are allowed",
+        })
+        .refine(file => file.size <= 5 * 1024 * 1024, { // 5MB size limit
+          message: "Image size must be less than 5MB",
+        })
+      )
+      .min(1, "At least one image is required"),
     tasks: z
       .array(
         z.object({
@@ -53,7 +64,7 @@ const ProgressReportForm = () => {
           objective: z.string().optional(),
           plannedDate: z.string().optional(),
           actualDate: z.string().optional(),
-          progressComplete: z.number().min(0).max(100),
+          progressComplete: z.string(),
           deliverable: z.string().optional(),
         })
       )
@@ -82,7 +93,7 @@ const ProgressReportForm = () => {
     defaultValues: {},
   });
 
-  const { control, handleSubmit } = form;
+  const { control, handleSubmit, setValue, getValues } = form;
 
   const {
     fields: taskFields,
@@ -111,7 +122,37 @@ const ProgressReportForm = () => {
     name: 'summary',
   });
 
-  const onSubmit = (data: any) => {
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const newFiles = Array.from(files);
+      setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+      setValue('images', [...getValues('images') || [], ...newFiles]); // Update form value
+
+      // Generate image previews
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const handleRemoveFile = (index: number) => {
+    const newFiles = uploadedFiles.filter((_, i) => i !== index);
+    const newPreviews = previews.filter((_, i) => i !== index);
+    setUploadedFiles(newFiles);
+    setPreviews(newPreviews);
+    setValue('images', newFiles); // Update form value
+  };
+
+
+  const onSubmit = (data: FormData) => {
     console.log(data);
   };
 
@@ -198,6 +239,51 @@ const ProgressReportForm = () => {
                 </FormItem>
               )}
             />
+
+            {/* Images Upload Field */}
+            <FormField
+              control={control}
+              name="images"
+              render={() => (
+                <FormItem className="flex flex-col py-2">
+                  <FormLabel className="text-lg font-semibold mr-auto">Upload Images:</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      multiple
+                      accept="image/jpeg, image/png"
+                      onChange={handleFileUpload}
+                    />
+                  </FormControl>
+                  <FormMessage />
+
+                  {/* Display uploaded files with previews */}
+                  {previews.length > 0 && (
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4">
+                      {previews.map((preview, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={preview}
+                            alt={`Uploaded ${index}`}
+                            className="w-full h-52 object-cover rounded-lg shadow"
+                          />
+                          {/* "X" Button to remove the image */}
+                          <Button
+                            variant="destructive"
+                            type="button"
+                            onClick={() => handleRemoveFile(index)}
+                            className="absolute size-8 top-2 right-2 text-white bg-black bg-opacity-60 rounded-md p-1 hover:bg-opacity-100 transition-opacity group-hover:opacity-100 md:opacity-0"
+                          >
+                            ✕
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </FormItem>
+              )}
+            />
+
             {/* Summary Section */}
             <div>
               <div className="flex justify-between items-center mt-2">
@@ -336,7 +422,7 @@ const ProgressReportForm = () => {
                       objective: '',
                       plannedDate: '',
                       actualDate: '',
-                      progressComplete: 0,
+                      progressComplete: '0',
                       deliverable: 'Not Started',
                     })
                   }
@@ -598,6 +684,19 @@ const ProgressReportForm = () => {
                         )}
                       />
                       {/* Owner Field */}
+                      <FormField
+                        control={control}
+                        name={`issues.${index}.action`}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col items-start">
+                            <FormLabel>Action description</FormLabel>
+                            <FormControl>
+                              <Textarea placeholder="Why was this ignored OR what action was taken" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       <FormField
                         control={control}
                         name={`issues.${index}.owner`}

@@ -11,41 +11,41 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="bg-none sticky top-0 py-2 pl-2 pr-2 md:pr-0 md:h-screen md:w-64 w-full z-20">
-      <div
-        className="bg-custom-black h-full rounded-[5px] flex flex-col justify-between relative">
+    <div className="bg-none md:fixed sticky top-0 py-2 pl-2 pr-2 md:pr-0 md:h-screen md:w-64 w-full z-20 flex-shrink-0">
+      <div className="bg-custom-black h-full rounded-[5px] flex flex-col justify-between relative">
         <div>
           <div className={"flex flex-row justify-between md:hidden"}>
             <Link to="/admin" id="nav-title">
-              <img src={Logo} alt="SITEMASTER" className="pt-1 w-full" />
+              <img src={Logo} alt="SITEMASTER" className="pt-1 w-full"/>
             </Link>
             <div className="p-5 md:p-2 md:w-64 flex justify-end items-center">
               <button className="text-white md:hidden" onClick={() => setIsOpen(!isOpen)}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7"/>
                 </svg>
               </button>
             </div>
           </div>
           <div className={"hidden md:block"}>
             <Link to="/admin" id="nav-title">
-              <img src={Logo} alt="SITEMASTER" className="pt-1 w-full" />
+              <img src={Logo} alt="SITEMASTER" className="pt-1 w-full"/>
             </Link>
             <div className="p-5 md:p-2 md:w-64 flex justify-end items-center">
               <button className="text-white md:hidden" onClick={() => setIsOpen(!isOpen)}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7"/>
                 </svg>
               </button>
             </div>
           </div>
           {/* Conditionally render links based on isOpen state */}
-          <ul className={`${isOpen ? 'block absolute top-full left-0 w-full bg-custom-red z-30' : 'hidden'} md:block`}> {/* Changed to absolute for dropdown */}
+          <ul
+            className={`${isOpen ? 'block absolute top-full left-0 w-full bg-custom-red z-30' : 'hidden'} md:block`}> {/* Changed to absolute for dropdown */}
             <li className="py-2 hover:bg-custom-red cursor-pointer">
               <div onClick={() => setIsOpen(false)}>
                 <Link to="/admin/sites" className="md:ml-4 block text-white">
                   <div className="flex items-center justify-center md:justify-start">
-                    <img src={Sites} alt="" className="hidden md:inline mr-2" />
+                    <img src={Sites} alt="" className="hidden md:inline mr-2"/>
                     Sites
                   </div>
                 </Link>
@@ -55,7 +55,7 @@ const Navbar = () => {
               <div onClick={() => setIsOpen(false)}>
                 <Link to="/admin/employees" className="md:ml-4 block text-white">
                   <div className="flex items-center justify-center md:justify-start">
-                    <img src={Employees} alt="" className="hidden md:inline mr-2" />
+                    <img src={Employees} alt="" className="hidden md:inline mr-2"/>
                     Employees
                   </div>
                 </Link>
@@ -65,7 +65,7 @@ const Navbar = () => {
               <div onClick={() => setIsOpen(false)}>
                 <Link to="/admin/settings" className="md:ml-4 block text-white">
                   <div className="flex items-center justify-center md:justify-start">
-                    <img src={Settings} alt="" className="hidden md:inline mr-2" />
+                    <img src={Settings} alt="" className="hidden md:inline mr-2"/>
                     Settings
                   </div>
                 </Link>

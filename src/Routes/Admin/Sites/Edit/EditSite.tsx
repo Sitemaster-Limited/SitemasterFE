@@ -1,11 +1,11 @@
 import React, {useEffect, useState,} from "react";
-import {Employee} from "../../Utility/GlobalTypes";
-import {useFormContext} from "../../Context/LocalObjectForm";
-import {useSiteData} from "../../Hooks/SiteData";
+import {Employee} from "../../../../Utility/GlobalTypes";
+import {useFormContext} from "../../../../Context/LocalObjectForm";
+import {useSiteData} from "../../../../Hooks/SiteData";
 import {useLocation} from 'react-router-dom';
 import {useAuth} from "@clerk/clerk-react";
 
-import EmployeeSelection from "../../Components/EmployeeSelection";
+import EmployeeSelection from "../../../../Components/EmployeeSelection";
 
 import Autocomplete from 'react-google-autocomplete';
 
@@ -83,7 +83,7 @@ const EditSite = () => {
   }
 
   return (
-    <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-4">
+    <div className="flex flex-col p-4">
 
       <div className="h-[6%] rounded-[5px] mb-3">
         <h1 className="text-left text-[34px]">
@@ -97,8 +97,8 @@ const EditSite = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 p-2">
-        <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 p-2">
+        <div className="order-2 md:order-1">
           <div className="text-left mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="site-name">
               Site name:
@@ -175,7 +175,7 @@ const EditSite = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col items-center px-6">
+        <div className="order-1 md:order-2 flex flex-col items-center md:px-6">
           <div className="text-md font-bold mb-2">Site Access:</div>
           {localSite.siteAccess && localSite.siteAccess.length > 0 ? (
             <table className="w-fit leading-normal">

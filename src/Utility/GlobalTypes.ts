@@ -1,9 +1,3 @@
-export type SiteList = {
-    id: string;
-    name: string;
-    date: string;
-    status: 'Active' | 'Saved' | 'Inactive' | '';
-};
 
 export type Employee = {
     employeeId: string;
@@ -19,11 +13,6 @@ export type SimpleSort = {
 
 export type EmployeeListProps = {
     employees: Employee[];
-    searchTerm?: string;
-};
-
-export type AttendanceListProps = {
-    attendances: Attendance[];
     searchTerm?: string;
 };
 
@@ -49,18 +38,53 @@ export type Attendance = {
     accuracy: string;
 };
 
+export type ProgressReport = {
+    projectName: string;
+    projectManager: string;
+    compiledBy: string;
+    reportingPeriod: string;
+    projectDueDate: string;
+    dateSubmitted: string;
+    summary: {
+        item: string;
+        currentStatus: 'On Time' | 'Delayed' | 'Changes Needed';
+        priorStatus: 'On Time' | 'Delayed' | 'Changes Needed';
+        summary: string;
+    }
+    tasks: {
+        task: string;
+        status: 'Finished' | 'In Progress' | 'Not Started';
+        objective: string;
+        plannedDate: string;
+        actualDate: string;
+        progressComplete: number,
+        deliverable: string;
+    }
+    issues: {
+        issue: string;
+        identifiedDate: string;
+        actionOrIgnore: 'Action' | 'Ignore';
+        action: string;
+        owner: string;
+        resolved: 'Yes' | 'No';
+    }
+}
+
+export type siteInfo = {
+    siteId: string;
+    dateCreated: string;
+    siteName: string;
+    siteLocation: string;
+    siteStatus: 'Active' | 'Saved' | 'Inactive' | '';
+    bluePrints: [];
+    qrCode: [];
+};
+
 export type Site = {
-    siteInfo: {
-        siteId: string;
-        dateCreated: string;
-        siteName: string;
-        siteLocation: string;
-        siteStatus: 'Active' | 'Saved' | 'Inactive' | '';
-        bluePrints: [];
-        qrCode: [];
-    };
+    siteInfo: siteInfo;
     siteAccess: [];
     siteAttendance: Attendance[];
+    siteProgressReport: ProgressReport[];
 }
 
 export let globalClientId: string | undefined = undefined;
