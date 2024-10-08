@@ -20,7 +20,7 @@ function AppWithNavbar() {
     <div className={`App flex flex-col overflow-hidden ${isAdminRoute ? "md:flex-row" : ""} min-h-screen bg-custom-bg`}>
       {isAdminRoute && <Navbar/>}
       {(isSiteRoute || isHomeRoute) && <SiteHeader/>}
-      <div className="flex-grow md:ml-64 w-full">
+      <div className={`flex-grow md:ml-64 w-full`}>
         <Routes>
           <Route path="/" element={<LoginPage/>}/>
           <Route path="/login/*" element={<SiteRoutes/>}/>
