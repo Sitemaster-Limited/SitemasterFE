@@ -1,16 +1,16 @@
 import React, {useEffect, useState, useRef} from "react";
-import {useFormContext} from "../../Context/LocalObjectForm";
-import {useSiteData} from "../../Hooks/SiteData";
-import {Employee} from "../../Utility/GlobalTypes";
-import {encryptData} from "../../Utility/Cypher";
+import {useFormContext} from "../../../../Context/LocalObjectForm";
+import {useSiteData} from "../../../../Hooks/SiteData";
+import {Employee} from "../../../../Utility/GlobalTypes";
+import {encryptData} from "../../../../Utility/Cypher";
 import {useAuth, useUser} from "@clerk/clerk-react";
 
 import QRCode from "qrcode.react";
-import PutSite from "../../Services/PutSite";
-import PostImages from "../../Services/PostImages";
-import GenerateSiteId from "../../Utility/GenerateSiteId";
-import EmployeeSelection from "../../Components/EmployeeSelection";
-import GetImages from "../../Services/GetImages";
+import PutSite from "../../../../Services/PutSite";
+import PostImages from "../../../../Services/PostImages";
+import GenerateSiteId from "../../../../Utility/GenerateSiteId";
+import EmployeeSelection from "../../../../Components/EmployeeSelection";
+import GetImages from "../../../../Services/GetImages";
 
 import Autocomplete from 'react-google-autocomplete';
 
@@ -141,7 +141,7 @@ const CreateSite = () => {
 
 
   return (
-    <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-4">
+    <div className="flex flex-col bg-custom-bg h-screen p-4">
 
       <div className="h-[6%] rounded-[5px] mb-3">
         <h1 className="text-left text-[34px]">

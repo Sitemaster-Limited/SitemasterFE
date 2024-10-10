@@ -1,20 +1,18 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
-import {SignOutButton} from '@clerk/clerk-react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { SignOutButton } from '@clerk/clerk-react';
 
-import Logo from '../Images/SiteMasterLogo.png'
-import Sites from '../Images/SiteIcon.png'
-import Employees from '../Images/EmployeeIcon.png'
-import Settings from '../Images/SettingsIcon.png'
-
+import Logo from '../Images/SiteMasterLogo.png';
+import Sites from '../Images/SiteIcon.png';
+import Employees from '../Images/EmployeeIcon.png';
+import Settings from '../Images/SettingsIcon.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="bg-custom-bg fixed top-0 py-2 pl-2 pr-2 md:pr-0 md:h-full md:w-64 w-full z-20">
-      <div
-        className="bg-custom-black h-full rounded-[5px] flex flex-col justify-between"> {/* Adjusted for flex layout */}
+    <div className="bg-none md:fixed sticky top-0 py-2 pl-2 pr-2 md:pr-0 md:h-screen md:w-64 w-full z-20 flex-shrink-0">
+      <div className="bg-custom-black h-full rounded-[5px] flex flex-col justify-between relative">
         <div>
           <div className={"flex flex-row justify-between md:hidden"}>
             <Link to="/admin" id="nav-title">
@@ -41,7 +39,8 @@ const Navbar = () => {
             </div>
           </div>
           {/* Conditionally render links based on isOpen state */}
-          <ul className={`${isOpen ? 'block bg-custom-red' : 'hidden'} md:block`}>
+          <ul
+            className={`${isOpen ? 'block absolute top-full left-0 w-full bg-custom-red z-30' : 'hidden'} md:block`}> {/* Changed to absolute for dropdown */}
             <li className="py-2 hover:bg-custom-red cursor-pointer">
               <div onClick={() => setIsOpen(false)}>
                 <Link to="/admin/sites" className="md:ml-4 block text-white">
@@ -75,8 +74,7 @@ const Navbar = () => {
             <li className="py-2 hover:bg-custom-red cursor-pointer md:hidden">
               <div onClick={() => setIsOpen(false)}>
                 <SignOutButton>
-                  <Link className="md:ml-4 block text-white"
-                        to="/">
+                  <Link className="md:ml-4 block text-white" to="/">
                     <div className="flex items-center justify-center md:justify-start">
                       Sign out
                     </div>
@@ -89,10 +87,9 @@ const Navbar = () => {
         {/* SignOutButton placed at the bottom */}
         <div className="p-4 hidden md:block">
           <SignOutButton>
-              <Link className="text-white py-2 px-4 w-full"
-                           to="/">
-                  Sign Out
-              </Link>
+            <Link className="text-white py-2 px-4 w-full" to="/">
+              Sign Out
+            </Link>
           </SignOutButton>
         </div>
       </div>

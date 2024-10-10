@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {Employee} from "../../Utility/GlobalTypes";
-import {useFormContext} from "../../Context/LocalObjectForm";
+import {Employee} from "../../../Utility/GlobalTypes";
+import {useFormContext} from "../../../Context/LocalObjectForm";
 
 import InputMask from "react-input-mask";
-import AddSite from "../../Images/AddSite.png";
-import PutEmployee from "../../Services/PutEmployee";
-import DisplayEmployeeList from "../../Components/DisplayEmployeeList";
+import AddSite from "../../../Images/AddSite.png";
+import PutEmployee from "../../../Services/PutEmployee";
+import DisplayEmployeeList from "../../../Components/DisplayEmployeeList";
 
 const Employees = () => {
 
@@ -48,7 +48,7 @@ const Employees = () => {
   };
 
   return (
-    <div className="flex flex-col bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2 relative">
+    <div className="flex flex-col bg-custom-bg h-screen p-2 relative">
       <div className="h-[6%] rounded-[5px] mb-3">
         <h1 className="text-left text-[34px]">My Employees</h1>
       </div>

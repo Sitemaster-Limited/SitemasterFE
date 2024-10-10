@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
 import { useAuth, useUser } from '@clerk/clerk-react';
-import { useAccountData } from "../../Hooks/AccountData";
-import { useFormContext } from "../../Context/LocalObjectForm";
+import { useAccountData } from "../../../Hooks/AccountData";
+import { useFormContext } from "../../../Context/LocalObjectForm";
 
 import InputMask from "react-input-mask";
-import PostAccount from "../../Services/PostAccount";
+import PostAccount from "../../../Services/PostAccount";
 
 const Settings = () => {
 

@@ -3,13 +3,15 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { SignedIn, SignedOut, SignIn, useUser  } from "@clerk/clerk-react";
 import { useFormContext } from "../../Context/LocalObjectForm";
 
-import Sites from './Sites';
-import CreateSite from "./CreateSite";
-import EditSite from "./EditSite";
-import Settings from './Settings';
-import Employees from './Employees';
+import Sites from './Sites/Sites';
+import CreateSite from "./Sites/Create/CreateSite";
+import EditSite from "./Sites/Edit/EditSite";
+import Settings from './Settings/Settings';
+import Employees from './Employees/Employees';
 import GetClient from "../../Services/GetClient";
-import SiteAttendance from "./SiteAttendance";
+import SiteAttendance from "./Sites/Manage/SiteAttendance";
+import SiteProgressReport from "./Sites/Manage/SiteProgressReport";
+import CreateProgressReport from "./Sites/Create/CreateProgressReport";
 
 const AdministratorPage = () => {
 
@@ -40,13 +42,13 @@ const AdministratorPage = () => {
   return (
     <>
       <SignedOut>
-        <div className="flex flex-col items-center justify-center bg-custom-bg h-screen mt-20 md:mt-0 md:ml-64 p-2">
+        <div className="flex justify-center items-center h-[80vh]">
           <SignIn redirectUrl="admin/settings"
                   appearance={{
                     variables: {
                       colorPrimary: "#EE172E"
                     },
-                  }}/> {/* Customize redirectUrl as needed */}
+                  }}/>
         </div>
       </SignedOut>
       <SignedIn>
@@ -56,6 +58,8 @@ const AdministratorPage = () => {
           <Route path="sites/create" element={<CreateSite />} />
           <Route path="sites/edit" element={<EditSite />} />
           <Route path="sites/attendance" element={<SiteAttendance />} />
+          <Route path="sites/progress" element={<SiteProgressReport />} />
+          <Route path="sites/progress/create-report" element={<CreateProgressReport />} />
           <Route path="employees" element={<Employees />} />
           <Route path="settings" element={<Settings />} />
         </Routes>

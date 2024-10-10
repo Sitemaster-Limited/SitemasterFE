@@ -1,4 +1,4 @@
-import { Site, Employee } from './GlobalTypes'
+import { Site, Employee, ProgressReport } from './GlobalTypes'
 
 export interface FormData {
     id: string;
