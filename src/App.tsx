@@ -17,7 +17,7 @@ function AppWithNavbar() {
   const isHomeRoute = location.pathname === '/'; // Check if the path is exactly the root
 
   return (
-    <div className={`App flex flex-col overflow-hidden ${isAdminRoute ? "md:flex-row" : ""} min-h-screen bg-custom-bg`}>
+    <div className={`App flex flex-col ${isAdminRoute ? "md:flex-row" : ""} min-h-screen bg-custom-bg relative`}>
       {isAdminRoute && <Navbar/>}
       {(isSiteRoute || isHomeRoute) && <SiteHeader/>}
       <div className={`flex-grow ${isAdminRoute ? "md:ml-64" : ""} w-full`}>

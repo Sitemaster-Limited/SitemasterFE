@@ -1,37 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from "react-router-dom"; // useNavigate for navigation
-import AddSite from "../../../../Images/AddSite.png";
-import { useUser } from "@clerk/clerk-react";
-import { ProgressReport } from "../../../../Utility/GlobalTypes";
+import React, {useEffect, useState} from 'react';
+import { useSiteDetails } from "../../../Context/SiteDetails";
+import {globalClientId, ProgressReport} from "../../../Utility/GlobalTypes";
+import AddSite from "../../../Images/AddSite.png";
+import {useNavigate} from "react-router-dom";
 
 const SiteProgressReport = () => {
-  const location = useLocation();
-  const navigate = useNavigate(); // useNavigate hook
-  const user = useUser();
+
+  const navigate = useNavigate();
+  const { siteDetails } = useSiteDetails();
   const [siteId, setSiteId] = useState<string>("");
-  const [clientId, setClientId] = useState<string>("");
+  const [clientId, setClientId] = useState<string>(() => localStorage.getItem('clientId') || "");
   const [allReports, fillAllReports] = useState<ProgressReport[]>([]);
 
   useEffect(() => {
+    if (globalClientId) {
+      setClientId(globalClientId);
+      localStorage.setItem('clientId', globalClientId);
+    }
+  }, []);
+
+  useEffect(() => {
     // Ensure attendance is only set once location is ready and siteAttendance exists
-    if (location.state?.site?.siteInfo) {
-      setSiteId(location.state.site.siteInfo.siteId);
+    if (siteDetails?.siteInfo?.siteId) {
+      setSiteId(siteDetails.siteInfo.siteId);
     }
-    if (location.state?.site?.siteProgressReports) {
-      fillAllReports(location.state.site.siteProgressReports);
+    if (siteDetails?.siteProgressReports) {
+      fillAllReports(siteDetails.siteProgressReports);
     }
-    if (user.user?.primaryEmailAddress?.emailAddress) {
-      setClientId(user.user?.primaryEmailAddress?.emailAddress);
-    }
-  }, [location.state, user]);
+
+  }, [siteDetails]);
 
   const navigateToReportForm = (report?: ProgressReport) => {
     // Navigate to the ProgressReportForm route, passing data via state
-    navigate("create-report", {
+    navigate("view-report", {
       state: {
         report,
         siteId,
-        clientId
+        clientId,
       }
     });
   };

@@ -86,7 +86,7 @@ const SitePage = () => {
           </div>
         </button>
 
-        <button onClick={() => navigate(`progress-report`)}
+        <button onClick={() => navigate(`progress-reports`)}
                 className="bg-white w-full col-span-2 rounded-lg shadow-md flex flex-row items-start p-4">
           <ClipboardList />
           <p className="ml-1 text-lg font-semibold font-sans">Progress Report</p>

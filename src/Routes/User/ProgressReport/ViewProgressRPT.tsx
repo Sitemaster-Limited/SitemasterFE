@@ -1,12 +1,11 @@
 import React from 'react';
 import { useLocation } from "react-router-dom";
-import ProgressReportForm from "../../../../Components/ProgressReportForm";
+import ProgressReportForm from "../../../Components/ProgressReportForm";
 
-const CreateProgressReport = () => {
+const ViewProgressReport = () => {
 
   const location = useLocation();
   const { report, siteId, clientId } = location.state || {}; // Access passed state
-
 
   return (
     <div className="flex h-full flex-col p-2">
@@ -15,7 +14,7 @@ const CreateProgressReport = () => {
         <ProgressReportForm
           siteId={siteId}
           clientId={clientId}
-          redirectUrl={"/site/progress-reports"}
+          redirectUrl={"/admin/sites/progress"}
           report={report}
         />
       )}
@@ -23,4 +22,4 @@ const CreateProgressReport = () => {
   );
 };
 
-export default CreateProgressReport;
+export default ViewProgressReport;
