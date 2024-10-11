@@ -4,6 +4,7 @@ const PutProgress = async (
   clientId: string,
   siteId: string,
   reportId: string,
+  page: string,
   images: File[] | null,
   updateReport: ProgressReport,
 ): Promise<string | null> => {
@@ -18,7 +19,7 @@ const PutProgress = async (
 
     formData.append('updatedReport', JSON.stringify(updateReport));
 
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Report/updateReport?siteId=${encodeURIComponent(siteId)}&clientId=${encodeURIComponent(clientId)}&reportId=${encodeURIComponent(reportId)}`, {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Report/updateReport?clientId=${encodeURIComponent(clientId)}&siteId=${encodeURIComponent(siteId)}&reportId=${encodeURIComponent(reportId)}&page=${encodeURIComponent(page)}`, {
       method: 'PUT',
       body: formData,
     });

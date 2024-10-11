@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useSiteDetails } from "../../../Context/SiteDetails";
-import {globalClientId, ProgressReport} from "../../../Utility/GlobalTypes";
+import {ProgressReport} from "../../../Utility/GlobalTypes";
 import AddSite from "../../../Images/AddSite.png";
 import {useNavigate} from "react-router-dom";
 
@@ -9,15 +9,7 @@ const SiteProgressReport = () => {
   const navigate = useNavigate();
   const { siteDetails } = useSiteDetails();
   const [siteId, setSiteId] = useState<string>("");
-  const [clientId, setClientId] = useState<string>(() => localStorage.getItem('clientId') || "");
   const [allReports, fillAllReports] = useState<ProgressReport[]>([]);
-
-  useEffect(() => {
-    if (globalClientId) {
-      setClientId(globalClientId);
-      localStorage.setItem('clientId', globalClientId);
-    }
-  }, []);
 
   useEffect(() => {
     // Ensure attendance is only set once location is ready and siteAttendance exists
@@ -36,7 +28,6 @@ const SiteProgressReport = () => {
       state: {
         report,
         siteId,
-        clientId,
       }
     });
   };

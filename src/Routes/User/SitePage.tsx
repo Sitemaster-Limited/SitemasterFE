@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import { ClipboardList } from 'lucide-react';
 import {Employee} from "../../Utility/GlobalTypes";
 import {useSiteDetails} from "../../Context/SiteDetails";
+import Spinner from "../../Components/ui/spinner";
 
 import InputMask from "react-input-mask";
 import Time from '../../Images/Time.png';
@@ -41,7 +42,11 @@ const SitePage = () => {
 
   // Render loading state or prompt for phone number verification
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex h-screen justify-center items-start mt-20">
+        <Spinner />
+      </div>
+    );
   }
 
   if (!isVerified) {

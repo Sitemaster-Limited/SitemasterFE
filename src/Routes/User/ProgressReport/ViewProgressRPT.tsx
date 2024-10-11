@@ -5,16 +5,18 @@ import ProgressReportForm from "../../../Components/ProgressReportForm";
 const ViewProgressReport = () => {
 
   const location = useLocation();
-  const { report, siteId, clientId } = location.state || {}; // Access passed state
+  const { report, siteId } = location.state || {};
+  const storedClientId = localStorage.getItem('clientId');
 
   return (
     <div className="flex h-full flex-col p-2">
       <h1 className="text-xl mr-auto ml-4 font-semibold">Progress Report Form</h1>
-      {siteId && clientId && (
+      {siteId && storedClientId && (
         <ProgressReportForm
           siteId={siteId}
-          clientId={clientId}
-          redirectUrl={"/admin/sites/progress"}
+          clientId={storedClientId}
+          redirectUrl={"no-redirect"}
+          page="User"
           report={report}
         />
       )}

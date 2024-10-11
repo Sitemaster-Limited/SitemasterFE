@@ -3,6 +3,7 @@ import { ProgressReport } from "../Utility/GlobalTypes";
 const PostProgress = async (
   clientId: string,
   siteId: string,
+  page: string,
   images: File[] | null,
   newReport: ProgressReport,
 ): Promise<string | null> => {
@@ -17,7 +18,7 @@ const PostProgress = async (
 
     formData.append('newReport', JSON.stringify(newReport));
 
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Report/addReport?siteId=${encodeURIComponent(siteId)}&clientId=${encodeURIComponent(clientId)}}`, {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Report/addReport?clientId=${encodeURIComponent(clientId)}&siteId=${encodeURIComponent(siteId)}&page=${encodeURIComponent(page)}`, {
       method: 'POST',
       body: formData,
     });

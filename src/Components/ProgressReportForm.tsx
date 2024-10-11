@@ -29,6 +29,13 @@ import {
   AccordionTrigger
 } from "./ui/accordion";
 import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from "./ui/dialog";
+import {
   ProgressReport,
   ProgressReportSchema,
 } from '../Utility/GlobalTypes';
@@ -38,11 +45,14 @@ import GetReportImages from "../Services/GetReportImages";
 import {useFormContext} from "../Context/LocalObjectForm";
 import GetClient from "../Services/GetClient";
 import Spinner from "./ui/spinner";
+import { toast } from "sonner"
+
 
 interface ProgressReportProps {
   siteId: string;
   clientId: string;
   redirectUrl: string;
+  page: string;
   report?: ProgressReport;
 }
 
@@ -50,6 +60,7 @@ const ProgressReportForm = ({
                               siteId,
                               clientId,
                               redirectUrl,
+                              page,
                               report,
                             }: ProgressReportProps) => {
   const navigate = useNavigate();
@@ -160,6 +171,16 @@ const ProgressReportForm = ({
     setImages((prevImages) => prevImages.filter((_, i) => i !== actualIndex));
   };
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // State to track clicked image for full-screen view
+
+  const handleImageClick = (image: string) => {
+    setSelectedImage(image); // Set the clicked image to full-screen
+  };
+
+  const handleCloseModal = () => {
+    setSelectedImage(null); // Close the modal by resetting selectedImage
+  };
+
 // Form submission handler
   const onSubmit = async (data: ProgressReport) => {
     // Separate new files and existing image URLs
@@ -171,19 +192,49 @@ const ProgressReportForm = ({
       images: existingUrls, // Keep only the existing image URLs
     };
 
-    if (report && report.reportId) {
-      // update report
-      await PutProgress(clientId, siteId, report.reportId, newFiles, modifiedData);
-    } else {
-      // add report
-      await PostProgress(clientId, siteId, newFiles, modifiedData);
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    const formattedTime = currentDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+
+    try {
+      // Check if report exists for updating or adding
+      if (report && report.reportId) {
+        // update report
+        await PutProgress(clientId, siteId, report.reportId, page, newFiles, modifiedData);
+      } else {
+        // add report
+        await PostProgress(clientId, siteId, page, newFiles, modifiedData);
+      }
+
+      // If you're on the "Admin" page, fetch client data and navigate to a new URL
+      if (page === "Admin") {
+        const client = await GetClient(clientId);
+        updateFormData({ ...formData, sites: client?.sites });
+        const site = client?.sites?.find((site) => site.siteInfo.siteId === siteId);
+        navigate(redirectUrl, { state: { site } });
+      }
+
+      // If successful, show the success toast
+      toast("Report saved successfully", {
+        description: `${formattedDate} at ${formattedTime}`,
+      });
+    } catch (error) {
+      // Optionally, handle the error and show an error toast
+      console.error("Failed to submit the form:", error);
+      toast.error("Failed to save the Report", {
+        description: `${formattedDate} at ${formattedTime}`,
+      });
     }
-
-    const client = await GetClient(clientId);
-    updateFormData({...formData, sites: client?.sites});
-    const site = client?.sites?.find((site) => site.siteInfo.siteId === siteId);
-
-    navigate(redirectUrl, {state: {site}});
   };
 
   return (
@@ -252,7 +303,7 @@ const ProgressReportForm = ({
                   <FormItem className="flex flex-col">
                     <FormLabel className="mr-auto">Project Due Date:</FormLabel>
                     <FormControl>
-                      <Input type="date" placeholder="YYYY-MM-DD" {...field} />
+                      <Input type="date" className="block" placeholder="YYYY-MM-DD" {...field} />
                     </FormControl>
                     <FormMessage/>
                   </FormItem>
@@ -265,7 +316,7 @@ const ProgressReportForm = ({
                   <FormItem className="flex flex-col">
                     <FormLabel className="mr-auto">Date Submitted:</FormLabel>
                     <FormControl>
-                      <Input type="date" placeholder="YYYY-MM-DD" {...field} />
+                      <Input type="date" className="block" placeholder="YYYY-MM-DD" {...field} />
                     </FormControl>
                     <FormMessage/>
                   </FormItem>
@@ -287,61 +338,77 @@ const ProgressReportForm = ({
                       onChange={handleFileUpload}
                     />
                   </FormControl>
-                  <FormMessage/>
+                  <FormMessage />
 
                   {/* Display Newly Uploaded Images */}
-                  {images.some(image => image instanceof File) && (
+                  {images.some((image) => image instanceof File) && (
                     <>
                       <h3 className="text-md font-semibold mt-4 mr-auto">Newly Uploaded Images:</h3>
                       <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {images
-                          .map((image, actualIndex) => {
-                            if (image instanceof File) {
-                              const file = image as File;
-                              const previewUrl = URL.createObjectURL(file);
+                        {images.map((image, actualIndex) => {
+                          if (image instanceof File) {
+                            const file = image as File;
+                            const previewUrl = URL.createObjectURL(file);
 
-                              return (
-                                <div key={actualIndex} className="relative group">
-                                  <img
-                                    src={previewUrl}
-                                    alt={`New Upload ${actualIndex}`}
-                                    className="w-full h-52 object-cover rounded-lg shadow"
-                                  />
-                                  {/* "X" Button to remove the image */}
-                                  <Button
-                                    variant="destructive"
-                                    type="button"
-                                    onClick={() => handleRemoveFile(actualIndex)}
-                                    className="absolute size-8 top-2 right-2 text-white bg-black bg-opacity-60 rounded-md p-1 hover:bg-opacity-100 transition-opacity group-hover:opacity-100 md:opacity-0"
-                                  >
-                                    ✕
-                                  </Button>
-                                </div>
-                              );
-                            }
-                            return null;
-                          })}
+                            return (
+                              <div key={actualIndex} className="relative group">
+                                <img
+                                  src={previewUrl}
+                                  alt={`New Upload ${actualIndex}`}
+                                  className="w-full h-52 object-cover rounded-lg shadow cursor-pointer"
+                                  onClick={() => handleImageClick(previewUrl)} // Set image to full screen on click
+                                />
+                                {/* "X" Button to remove the image */}
+                                <Button
+                                  variant="destructive"
+                                  type="button"
+                                  onClick={() => handleRemoveFile(actualIndex)}
+                                  className="absolute size-8 top-2 right-2 text-white bg-black bg-opacity-60 rounded-md p-1 hover:bg-opacity-100 transition-opacity group-hover:opacity-100 md:opacity-0"
+                                >
+                                  ✕
+                                </Button>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
                       </div>
                     </>
                   )}
 
                   {/* Display Existing Images */}
-                  {images.some(image => typeof image === 'string') && (
+                  {images.some((image) => typeof image === "string") && (
                     <>
                       <h3 className="text-md font-semibold mt-4 mr-auto">Images:</h3>
                       <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {images
-                          .map((image, actualIndex) =>
-                              typeof image === 'string' && (
-                                <div key={actualIndex} className="relative group">
-                                  <img
-                                    src={image as string}
-                                    alt={`Existing Image ${actualIndex}`}
-                                    className="w-full h-52 object-cover rounded-lg shadow"
-                                  />
-                                </div>
-                              )
-                          )}
+                        {images.map(
+                          (image, actualIndex) =>
+                            typeof image === "string" && (
+                              <div key={actualIndex} className="relative group">
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <img
+                                      src={image}
+                                      alt={`Existing Image ${actualIndex}`}
+                                      className="w-full h-52 object-cover rounded-lg shadow cursor-pointer"
+                                    />
+                                  </DialogTrigger>
+                                  <DialogContent className="h-fit w-fit max-w-[95vw] max-h-[85vh] p-0">
+                                    <DialogHeader>
+                                      <DialogTitle className="sr-only">Full-Screen Image</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="flex justify-center items-center h-full mt-2 p-4">
+                                      <img
+                                        src={image}
+                                        alt="Full-Screen"
+                                        className="max-w-full max-h-full object-contain rounded-lg"
+                                      />
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                            )
+                        )}
                       </div>
                     </>
                   )}
@@ -908,7 +975,7 @@ const ProgressReportForm = ({
 
             <Button
               type="submit"
-              className="sticky bg-custom-red hover:bg-custom-red bottom-4"
+              className="sticky md:w-52 md:mx-auto bg-custom-red hover:bg-custom-red bottom-4"
               disabled={
                 form.formState.isSubmitting
               }
