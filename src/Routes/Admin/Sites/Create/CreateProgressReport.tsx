@@ -16,6 +16,7 @@ const CreateProgressReport = () => {
           siteId={siteId}
           clientId={clientId}
           redirectUrl={"/site/progress-reports"}
+          page={"Admin"}
           report={report}
         />
       )}

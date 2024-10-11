@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Routes, Route, useLocation} from 'react-router-dom';
 import {FormProvider} from "./Context/LocalObjectForm";
+import { Toaster } from "./Components/ui/sonner"
 
 import LoginPage from "./Routes/Initial/LoginPage";
 import SiteRoutes from "./Routes/User/UserRoutes";
@@ -20,7 +21,7 @@ function AppWithNavbar() {
     <div className={`App flex flex-col ${isAdminRoute ? "md:flex-row" : ""} min-h-screen bg-custom-bg relative`}>
       {isAdminRoute && <Navbar/>}
       {(isSiteRoute || isHomeRoute) && <SiteHeader/>}
-      <div className={`flex-grow ${isAdminRoute ? "md:ml-64" : ""} w-full`}>
+      <div className={`flex-grow w-full ${isAdminRoute ? "md:ml-64" : ""}`}>
         <Routes>
           <Route path="/" element={<LoginPage/>}/>
           <Route path="/login/*" element={<SiteRoutes/>}/>
@@ -37,6 +38,7 @@ function App() {
       <FormProvider>
         <AppWithNavbar/> {/* Use this component to enable useLocation hook */}
       </FormProvider>
+      <Toaster />
     </Router>
   );
 }
