@@ -10,12 +10,11 @@ const CreateProgressReport = () => {
 
   return (
     <div className="flex h-full flex-col p-2">
-      <h1 className="text-xl mr-auto ml-4 font-semibold">Progress Report Form</h1>
       {siteId && clientId && (
         <ProgressReportForm
           siteId={siteId}
           clientId={clientId}
-          redirectUrl={"/site/progress-reports"}
+          redirectUrl={"/admin/sites/progress"}
           page={"Admin"}
           report={report}
         />
