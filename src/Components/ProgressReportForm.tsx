@@ -46,6 +46,9 @@ import {useFormContext} from "../Context/LocalObjectForm";
 import GetClient from "../Services/GetClient";
 import Spinner from "./ui/spinner";
 import { toast } from "sonner"
+import jsPDF from "jspdf";
+import autoTable, {Color} from "jspdf-autotable";
+import html2canvas from "html2canvas";
 
 
 interface ProgressReportProps {
@@ -171,16 +174,6 @@ const ProgressReportForm = ({
     setImages((prevImages) => prevImages.filter((_, i) => i !== actualIndex));
   };
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // State to track clicked image for full-screen view
-
-  const handleImageClick = (image: string) => {
-    setSelectedImage(image); // Set the clicked image to full-screen
-  };
-
-  const handleCloseModal = () => {
-    setSelectedImage(null); // Close the modal by resetting selectedImage
-  };
-
 // Form submission handler
   const onSubmit = async (data: ProgressReport) => {
     // Separate new files and existing image URLs
@@ -237,8 +230,291 @@ const ProgressReportForm = ({
     }
   };
 
+  const downloadPDF = async () => {
+    const doc = new jsPDF();
+
+    // Capture form data
+    const projectName = form.getValues("projectName");
+    const projectManager = form.getValues("projectManager");
+    const compiledBy = form.getValues("compiledBy");
+    const reportingPeriod = form.getValues("reportingPeriod");
+    const projectDueDate = form.getValues("projectDueDate");
+    const dateSubmitted = form.getValues("dateSubmitted");
+
+    // Title
+    doc.setFontSize(16);
+    doc.text("Progress Report", 105, 15, { align: "center" });
+
+    // General Information Table
+    const tableData = [
+      [
+        { content: "Project Name:", styles: { fillColor: [211, 211, 211] as Color } },
+        projectName,
+        { content: "Reporting Period:", styles: { fillColor: [211, 211, 211] as Color } },
+        reportingPeriod
+      ],
+      [
+        { content: "Project Manager:", styles: { fillColor: [211, 211, 211] as Color } },
+        projectManager,
+        { content: "Project Due Date:", styles: { fillColor: [211, 211, 211] as Color } },
+        projectDueDate
+      ],
+      [
+        { content: "Compiled By:", styles: { fillColor: [211, 211, 211] as Color } },
+        compiledBy,
+        { content: "Date Submitted:", styles: { fillColor: [211, 211, 211] as Color } },
+        dateSubmitted
+      ]
+    ];
+
+    autoTable(doc, {
+      startY: 20,
+      headStyles: { fillColor: [0, 0, 0] },
+      body: tableData,
+      theme: 'grid',
+      styles: {
+        halign: 'left',
+        valign: 'middle',
+        fontSize: 10,
+        cellPadding: 2
+      },
+      columnStyles: {
+        0: { cellWidth: 35 },
+        1: { cellWidth: 55 },
+        2: { cellWidth: 35 },
+        3: { cellWidth: 55 },
+      },
+    });
+
+    // Get Y-position after General Information Table
+    const finalY1 = (doc as any).lastAutoTable.finalY || 20;
+
+    // Summary Section
+    doc.setFontSize(14);
+    doc.text("Summary", 105, finalY1 + 10, { align: "center" });
+
+    const summaryFields = form.getValues("summary");
+
+    // Map summary fields into table data
+    const summaryData = summaryFields?.map((summaryItem, index) => {
+      let statusColor: Color = [255, 255, 255]; // Default white
+
+      // Determine color based on status
+      if (summaryItem.currentStatus === "On Time") {
+        statusColor = [198, 239, 206]; // Light green
+      } else if (summaryItem.currentStatus === "Delayed") {
+        statusColor = [255, 199, 206]; // Light red
+      } else if (summaryItem.currentStatus === "Changes Needed") {
+        statusColor = [255, 235, 156]; // Light yellow
+      }
+
+      return [
+        { content: summaryItem.item, styles: { fillColor: [255, 255, 255] as Color } },
+        { content: summaryItem.currentStatus, styles: { fillColor: statusColor } },
+        { content: summaryItem.priorStatus, styles: { fillColor: statusColor as Color } },
+        { content: summaryItem.summary, styles: { fillColor: [255, 255, 255] as Color } }
+      ];
+    });
+
+    // Add headers
+    const tableHeaders = [
+      { content: "Item" },
+      { content: "Current Status" },
+      { content: "Prior Status" },
+      { content: "Summary" }
+    ];
+
+    autoTable(doc, {
+      startY: finalY1 + 15,
+      head: [tableHeaders],
+      headStyles: {
+        halign: "left",
+        fillColor: [211, 211, 211],
+        textColor: [0, 0, 0],
+        fontStyle: "normal"
+      },
+      body: summaryData,
+      theme: 'grid',
+      styles: {
+        halign: 'left',
+        valign: 'middle',
+        overflow: 'linebreak',
+        fontSize: 10,
+        cellPadding: 2
+      },
+      columnStyles: {
+        0: { cellWidth: 40 },
+        1: { cellWidth: 30 },
+        2: { cellWidth: 30 },
+        3: { cellWidth: 80 },
+      },
+      didDrawPage: (data) => {
+        const pageCount = doc.getNumberOfPages();
+        doc.setFontSize(10);
+        doc.text(`Page ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+      },
+    });
+
+    // Get Y-position after Summary Table
+    const finalY2 = (doc as any).lastAutoTable.finalY || finalY1 + 15;
+
+    // Tasks Section
+    doc.setFontSize(14);
+    doc.text("Tasks", 105, finalY2 + 10, { align: "center" });
+
+    const taskFields = form.getValues("tasks");
+
+    // Map tasks fields into table data
+    const taskData = taskFields?.map((taskItem) => {
+
+      let statusColor: Color = [255, 255, 255]; // Default white
+
+      // Determine color based on status
+      if (taskItem.status === "Finished") {
+        statusColor = [198, 239, 206]; // Light green
+      } else if (taskItem.status === "In Progress") {
+        statusColor = [255, 235, 156]; // Light yellow
+      }
+
+      return [
+        { content: taskItem.task, styles: { fillColor: statusColor as Color } },
+        { content: taskItem.status, styles: { fillColor: statusColor as Color } },
+        { content: taskItem.objective, styles: { fillColor: statusColor as Color } },
+        { content: taskItem.plannedDate, styles: { fillColor: statusColor as Color } },
+        { content: taskItem.actualDate, styles: { fillColor: statusColor as Color } },
+        { content: taskItem.progressComplete, styles: { fillColor: statusColor as Color } },
+        { content: taskItem.deliverable, styles: { fillColor: statusColor as Color } },
+      ];
+    });
+
+    // Add headers for Tasks Table
+    const taskTableHeaders = [
+      { content: "Task" },
+      { content: "Status" },
+      { content: "Objective" },
+      { content: "Planned Date" },
+      { content: "Actual Date" },
+      { content: "Progress Comp (%)" },
+      { content: "Deliverable" },
+    ];
+
+    autoTable(doc, {
+      startY: finalY2 + 15,
+      head: [taskTableHeaders],
+      headStyles: {
+        halign: "left",
+        fillColor: [211, 211, 211],
+        textColor: [0, 0, 0],
+        fontStyle: "normal"
+      },
+      body: taskData,
+      theme: 'grid',
+      styles: {
+        fontSize: 10,
+        cellPadding: 2,
+        overflow: 'linebreak', // Ensures text wraps within cell
+        halign: 'left',
+        valign: 'middle',
+      },
+      columnStyles: {
+        0: { cellWidth: 25 }, // Task
+        1: { cellWidth: 20 }, // Status
+        2: { cellWidth: 40 }, // Objective
+        3: { cellWidth: 25 }, // Planned Date
+        4: { cellWidth: 25 }, // Actual Date
+        5: { cellWidth: 20 }, // Progress Complete
+        6: { cellWidth: 25 }, // Deliverable
+      },
+      didDrawPage: (data) => {
+        const pageCount = doc.getNumberOfPages();
+        doc.setFontSize(10);
+        doc.text(`Page ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+      },
+    });
+
+    const finalY3 = (doc as any).lastAutoTable.finalY || finalY2 + 15;
+
+    // Issues Section
+    doc.setFontSize(14);
+    doc.text("Issues", 105, finalY3 + 10, { align: "center" });
+
+    const issueFields = form.getValues("issues");
+
+    // Map issues fields into table data
+    const issueData = issueFields?.map((issueItem) => {
+
+      let statusColor: Color = [255, 255, 255]; // Default white
+
+      // Determine color based on status
+      if (issueItem.resolved === "Yes") {
+        statusColor = [198, 239, 206]; // Light green
+      } else if (issueItem.resolved === "No") {
+        statusColor = [255, 199, 206]; // Light red
+      }
+
+      return [
+        { content: issueItem.issue },
+        { content: issueItem.identifiedDate },
+        { content: `${issueItem.actionOrIgnore} - ${issueItem.action}` },
+        { content: issueItem.owner },
+        { content: issueItem.resolved, styles: { fillColor: statusColor as Color } },
+      ];
+    });
+
+    // Add headers for Issues Table
+    const issueTableHeaders = [
+      { content: "Issue Description" },
+      { content: "Identified Date" },
+      { content: "Action or Ignore" },
+      { content: "Owner" },
+      { content: "Resolved" },
+    ];
+
+    autoTable(doc, {
+      startY: finalY3 + 15,
+      head: [issueTableHeaders],
+      headStyles: {
+        halign: "left",
+        fillColor: [211, 211, 211],
+        textColor: [0, 0, 0],
+        fontStyle: "normal"
+      },
+      body: issueData,
+      theme: 'grid',
+      styles: {
+        fontSize: 10,
+        cellPadding: 2,
+        overflow: 'linebreak',
+        halign: 'left',
+        valign: 'middle',
+      },
+      columnStyles: {
+        0: { cellWidth: 55 }, // Issue Description
+        1: { cellWidth: 25 }, // Identified Date
+        2: { cellWidth: 55 }, // Action or Ignore
+        4: { cellWidth: 20 }, // Owner
+        5: { cellWidth: 25 }, // Resolved
+      },
+      didDrawPage: (data) => {
+        const pageCount = doc.getNumberOfPages();
+        doc.setFontSize(10);
+        doc.text(`Page ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+      },
+    });
+
+    // Save or Download the PDF
+    doc.save("progress-report.pdf");
+  };
+
+
   return (
-    <div className="p-4">
+    <div className="pt-0 px-4 pb-4 sm:pt-4">
+      <div className="flex flex-col sm:flex-row items-start sm:justify-between mb-3">
+        <h1 className="text-xl font-semibold mb-1 sm:mb-0">Progress Report Form</h1>
+        <Button onClick={downloadPDF}>
+          Download as PDF
+        </Button>
+      </div>
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col">
@@ -356,7 +632,6 @@ const ProgressReportForm = ({
                                   src={previewUrl}
                                   alt={`New Upload ${actualIndex}`}
                                   className="w-full h-52 object-cover rounded-lg shadow cursor-pointer"
-                                  onClick={() => handleImageClick(previewUrl)} // Set image to full screen on click
                                 />
                                 {/* "X" Button to remove the image */}
                                 <Button
@@ -854,7 +1129,7 @@ const ProgressReportForm = ({
                     {/* Accordion Trigger */}
                     <AccordionTrigger className="flex items-center">
                       <h3 className="font-medium">
-                        {form.getValues(`issues.${index}.issue`) || `Issue ${index + 1}`}
+                        {`Issue ${index + 1}`}
                       </h3>
                     </AccordionTrigger>
 
