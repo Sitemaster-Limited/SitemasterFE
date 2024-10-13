@@ -83,7 +83,7 @@ const ClockTime = () => {
 
       try {
         await submitAttendance(phoneNumber, now, locationData || { latitude: '', longitude: '', accuracy: '' }, 'clockIn');
-        //await sendSMS(phoneNumber, message);
+        await sendSMS(phoneNumber, message);
       } catch (error) {
         console.error('Error during clock-in:', error);
       }
@@ -116,7 +116,7 @@ const ClockTime = () => {
 
           try {
             await submitAttendance(phoneNumber, now, locationData || { latitude: '', longitude: '', accuracy: '' }, 'clockOut');
-            //await sendSMS(phoneNumber, message);
+            await sendSMS(phoneNumber, message);
           } catch (error) {
             console.error('Error during clock-out:', error);
           }
