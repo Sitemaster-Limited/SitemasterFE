@@ -9,6 +9,8 @@ import Spinner from "../../Components/ui/spinner";
 import InputMask from "react-input-mask";
 import Time from '../../Images/Time.png';
 import Blueprint from '../../Images/Blueprints.png';
+import { z } from 'zod'
+import { normalizePhoneNumber } from "../../Utility/Utility";
 
 const SitePage = () => {
 
@@ -19,24 +21,43 @@ const SitePage = () => {
 
   const navigate = useNavigate();
 
+  const phoneNumberSchema = z
+    .string()
+    .min(14, 'Phone number must be complete.')
+    .regex(/^\(\d{3}\)-\d{3}-\d{4}$/, 'Phone number must be in the format (###)-###-####');
+
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page when the component mounts
   }, []);
 
   const verifyPhoneNumber = () => {
+    // Validate the phone number using Zod
+    const phoneValidation = phoneNumberSchema.safeParse(phoneNumber);
 
-    if (siteDetails && siteDetails.siteAccess.some((employee: Employee) => {
+    if (!phoneValidation.success) {
+      alert(phoneValidation.error.errors[0].message);
+      return;
+    }
 
-      const cleanEmployeePhoneNumber = employee.phoneNumber.replace(/\D/g, '');
-      const cleanPhoneNumber = phoneNumber.replace(/\D/g, '');
+    let normalizedPhoneNumber = '';
+    try {
+      normalizedPhoneNumber = normalizePhoneNumber(phoneNumber);
+    } catch (error: any) {
+      alert(error.message);
+      return;
+    }
 
-      return cleanEmployeePhoneNumber === cleanPhoneNumber;
-    })) {
+    if (
+      siteDetails &&
+      siteDetails.siteAccess.some((employee: Employee) => {
+        const cleanEmployeePhoneNumber = normalizePhoneNumber(employee.phoneNumber);
+        return cleanEmployeePhoneNumber === normalizedPhoneNumber;
+      })
+    ) {
       setIsVerified(true);
       localStorage.setItem('verifiedPhoneNumber', phoneNumber);
-
     } else {
-      alert("Phone number not found. Please try again.");
+      alert('Phone number not found. Please try again.');
     }
   };
 
