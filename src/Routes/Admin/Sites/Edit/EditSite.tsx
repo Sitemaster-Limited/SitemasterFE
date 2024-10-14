@@ -9,14 +9,15 @@ import html2canvas from 'html2canvas';
 import EmployeeSelection from "../../../../Components/EmployeeSelection";
 
 import Autocomplete from 'react-google-autocomplete';
+import PutSite from "@/src/Services/PutSite";
 
-const EditSite = () => {
+const EditSite = async () => {
 
   const auth = useAuth();
   const location = useLocation();
   const [localSite, setLocalSite] = useState(location.state?.site);
-
   const {formData} = useFormContext();
+  const apiData = useSiteData(formData);
   const [token, setToken] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [message, setMessage] = useState('');
@@ -90,8 +91,8 @@ const EditSite = () => {
     }
   };
 
-  const handleSave = () => {
-
+  const handleSave = async () => {
+    await PutSite(apiData, String(formData.email), "update");
   }
 
   return (

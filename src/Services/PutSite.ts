@@ -1,9 +1,9 @@
 import {FormData} from "../Utility/FormInput";
 
-const PutSite = async (apiData: Partial<FormData>, adminId: string): Promise<string | null> => {
+const PutSite = async (apiData: Partial<FormData>, adminId: string, type: string): Promise<string | null> => {
   try {
 
-    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/updateSites/${adminId}?type=add`, {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}/Client/updateSites/${adminId}?type=${type}`, {
       method: 'PUT', // Change method to PUT
       headers: {
         'Content-Type': 'application/json',

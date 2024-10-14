@@ -78,7 +78,7 @@ const CreateSite = () => {
             "Post",
           );
 
-          await PutSite(apiData,  String(formData.email));
+          await PutSite(apiData,  String(formData.email), "add");
           console.log("Site added");
 
           updateFormData({sites: [...(formData.sites || []), apiData]});
